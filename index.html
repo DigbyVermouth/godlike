@@ -2,868 +2,1463 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Cryptogram Puzzle</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1208">
+<title>Drawing Closer to God — Talk Research Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0d0900;
-    --paper: #fdf6e3;
-    --aged: #f0e6c8;
-    --sepia: #7a5c2e;
-    --rust: #7a2800;
-    --forest: #1a3d1a;
-    --correct: #1a5c1a;
-    --wrong: #7a1200;
-    --highlight: #f5c800;
-    --highlight-dim: rgba(245,200,0,0.30);
+    --gold: #b5893a;
+    --gold-light: #d4aa5a;
+    --deep: #1a1208;
+    --warm: #2d1f0a;
+    --parchment: #f5edd8;
+    --cream: #faf5e9;
+    --text: #2c1f0e;
+    --text-muted: #6b5540;
+    --border: rgba(181,137,58,0.25);
+    --section-bg: rgba(181,137,58,0.06);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--aged);
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(139,90,43,0.08) 28px),
-      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    min-height: 100vh;
-    font-family: Consolas, 'Courier New', monospace;
-    color: var(--ink);
-    padding: 16px;
-    padding-bottom: 60px;
-  }
-  .masthead {
-    text-align: center;
-    border-top: 3px double var(--ink);
-    border-bottom: 3px double var(--ink);
-    padding: 10px 0;
-    margin-bottom: 14px;
-    position: relative;
-  }
-  .masthead h1 {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(24px, 7vw, 40px);
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1;
-  }
-  .masthead .subtitle { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #3a2400; font-weight: 700; margin-top: 4px; }
-  .corner-deco { position: absolute; font-size: 18px; color: #3a2400; top: 8px; }
-  .corner-deco.left { left: 8px; }
-  .corner-deco.right { right: 8px; }
 
-  /* CATEGORY STRIP */
-  .cat-strip-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; padding-bottom: 4px; scrollbar-width: none; }
-  .cat-strip-wrap::-webkit-scrollbar { display: none; }
-  .cat-strip { display: flex; gap: 6px; width: max-content; padding: 2px 1px; }
-  .cat-btn {
-    padding: 6px 13px;
-    border: 1.5px solid var(--ink);
-    background: var(--paper);
-    font-family: Consolas, 'Courier New', monospace;
-    font-size: 11px;
-    letter-spacing: 0.06em;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--deep);
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(181,137,58,0.04) 0px,
+      rgba(181,137,58,0.04) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+    padding: 48px 32px 40px;
+    text-align: center;
+    border-bottom: 2px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '✦';
+    position: absolute;
+    font-size: 200px;
+    color: rgba(181,137,58,0.04);
+    top: -40px;
+    left: -40px;
+    pointer-events: none;
+  }
+
+  .header-eyebrow {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: var(--gold-light);
+    font-size: 14px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    font-weight: 700;
-    color: #0d0900;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(26px, 4vw, 42px);
+    color: var(--parchment);
+    font-weight: 400;
+    line-height: 1.25;
+    max-width: 700px;
+    margin: 0 auto 12px;
+  }
+
+  .header-sub {
+    color: rgba(245,237,216,0.6);
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  /* Nav tabs */
+  .nav {
+    background: var(--warm);
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--gold);
+    scrollbar-width: none;
+    gap: 0;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: rgba(245,237,216,0.55);
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 22px;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.12s;
-    -webkit-tap-highlight-color: transparent;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    flex-shrink: 0;
   }
-  .cat-btn.active { background: var(--ink); color: var(--paper); }
-  .cat-btn:not(.active):hover { background: var(--highlight); }
 
-  /* CONTROLS */
-  .controls { display: flex; gap: 8px; margin-bottom: 12px; }
-  .btn {
-    flex: 1;
-    padding: 14px 8px;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    border: 2px solid var(--ink);
-    cursor: pointer;
-    transition: all 0.12s;
+  .nav-btn:hover { color: var(--gold-light); }
+  .nav-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+    background: rgba(181,137,58,0.08);
+  }
+
+  /* Main container */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+  }
+
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .section-intro {
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-size: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Attitude cards */
+  .attitude-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
     position: relative;
-    top: 0;
-    -webkit-tap-highlight-color: transparent;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: default;
   }
-  .btn-primary { background: var(--ink); color: var(--paper); }
-  .btn-primary:hover { background: var(--rust); border-color: var(--rust); top: -1px; box-shadow: 2px 2px 0 var(--ink); }
-  .btn-secondary { background: var(--paper); color: var(--ink); }
-  .btn-secondary:hover { background: var(--highlight); top: -1px; box-shadow: 2px 2px 0 var(--ink); }
-  .btn:disabled { opacity: 0.38; cursor: not-allowed; top: 0 !important; box-shadow: none !important; }
 
-  /* STATS */
-  .stats-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .stat-box { flex: 1; background: var(--paper); border: 1.5px solid var(--ink); padding: 7px 4px; text-align: center; }
-  .stat-num { font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 900; line-height: 1; }
-  .stat-lbl { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #3a2400; font-weight: 700; margin-top: 2px; }
-
-  /* WIN BANNER */
-  .win-banner { background: var(--forest); color: var(--paper); text-align: center; padding: 14px; margin-bottom: 12px; border: 2px solid var(--ink); animation: fadeSlide 0.5s ease; }
-  .win-banner h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 20px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
-  .win-banner p { font-size: 11px; letter-spacing: 0.15em; margin-top: 5px; opacity: 0.85; }
-  @keyframes fadeSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* PUZZLE CARD */
-  .puzzle-card { background: var(--paper); border: 2px solid var(--ink); padding: 20px 16px; margin-bottom: 14px; box-shadow: 4px 4px 0 var(--sepia); min-height: 110px; position: relative; }
-  .puzzle-card::before { content: ''; position: absolute; inset: 5px; border: 1px solid rgba(139,90,43,0.18); pointer-events: none; }
-  .status-bar { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #3a2400; font-weight: 700; margin-bottom: 8px; border-bottom: 2px solid #3a2400; padding-bottom: 7px; }
-  .loading-msg { text-align: center; font-family: Georgia, 'Times New Roman', serif; font-size: 15px; color: var(--sepia); padding: 28px 0; letter-spacing: 0.05em; }
-
-  /* SAME-LETTER TIP */
-  .same-letter-tip { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #7a2800; font-weight: 700; margin-bottom: 10px; text-align: center; min-height: 18px; }
-
-  /* CIPHER DISPLAY */
-  .cipher-display { display: flex; flex-wrap: wrap; gap: 8px 5px; align-items: flex-end; }
-  .word-group { display: flex; gap: 4px; margin-bottom: 10px; }
-  .letter-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .cipher-char {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(20px, 5.5vw, 28px);
-    font-weight: 700;
-    color: var(--rust);
-    line-height: 1;
-    width: 28px;
-    text-align: center;
-    border-radius: 2px;
-    transition: background 0.12s;
+  .card:hover {
+    box-shadow: 0 4px 20px rgba(181,137,58,0.15);
+    transform: translateY(-2px);
   }
-  .cipher-char.same-selected { color: var(--ink); background: var(--highlight); }
-  .letter-input {
-    width: 28px;
-    height: 32px;
-    border: none;
-    border-bottom: 2px solid var(--ink);
-    background: transparent;
-    text-align: center;
-    font-family: Consolas, 'Courier New', monospace;
-    font-size: clamp(16px, 4.5vw, 22px);
-    font-weight: 700;
-    color: var(--ink);
-    outline: none;
+
+  .card-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 0;
-    caret-color: transparent;
-    transition: background 0.12s, border-color 0.12s;
-    -webkit-tap-highlight-color: transparent;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .badge-avoid { background: #fde8e8; color: #9b2c2c; }
+  .badge-seek { background: #e8f5e9; color: #1a6b2c; }
+  .badge-practice { background: #e8f0fd; color: #1a3a7a; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .card-body {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .card-scripture {
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--gold);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
+  /* Two-column comparison */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 600px) {
+    /* Layout */
+    .two-col { grid-template-columns: 1fr; }
+    .attitude-grid { grid-template-columns: 1fr; }
+
+    /* Header */
+    .header { padding: 32px 20px 28px; }
+    .header h1 { font-size: 22px; }
+    .header-eyebrow { font-size: 11px; letter-spacing: 2px; }
+    .header-sub { font-size: 13px; }
+
+    /* Nav — larger tap targets, horizontal scroll */
+    .nav { gap: 0; }
+    .nav-btn { padding: 14px 16px; font-size: 12px; letter-spacing: 1px; min-height: 48px; }
+
+    /* Container */
+    .container { padding: 24px 16px 80px; }
+
+    /* Section titles */
+    .section-title { font-size: 22px; }
+    .section-intro { font-size: 15px; }
+
+    /* Cards — full width, readable padding */
+    .card { padding: 16px 18px; }
+    .card-title { font-size: 17px; }
+    .card-body { font-size: 14.5px; }
+
+    /* Timeline — reduce left indent on small screens */
+    .timeline { padding-left: 28px; }
+    .timeline-item::before { left: -21px; width: 10px; height: 10px; }
+    .timeline-item { padding: 14px 16px; }
+    .timeline-title { font-size: 16px; }
+    .timeline-body { font-size: 14.5px; }
+
+    /* Highlight boxes */
+    .highlight-box { padding: 16px 18px; }
+    .highlight-box .hb-text { font-size: 16px; }
+
+    /* Outline blocks — larger tap area */
+    .outline-header { padding: 14px 16px; min-height: 56px; }
+    .outline-section-title { font-size: 15px; }
+    .outline-content { padding: 14px 16px; font-size: 15px; }
+
+    /* Checklist — larger tap targets */
+    .checklist-item { padding: 14px 0; min-height: 48px; }
+    .check-box { width: 24px; height: 24px; font-size: 15px; flex-shrink: 0; }
+    .check-label { font-size: 15px; }
+
+    /* Journal textareas — bigger on mobile */
+    .journal-textarea { font-size: 16px; min-height: 120px; }
+    .journal-area { padding: 18px 16px; }
+
+    /* Scripture table — stack on mobile */
+    .scripture-table { font-size: 14px; }
+    .scripture-table th, .scripture-table td { padding: 9px 10px; }
+    .ref-cell { font-size: 13px; white-space: normal; }
+
+    /* Attribute rows in col-blocks */
+    .attribute-row { padding: 10px 0; }
+    .attr-name { font-size: 15px; }
+    .attr-desc { font-size: 13.5px; }
+
+    /* Divider */
+    .divider { font-size: 12px; margin: 20px 0; }
+
+    /* Col-blocks inside body-mind section */
+    .col-block { padding: 16px; }
+    .col-header { font-size: 15px; }
+  }
+
+  /* Extra small — iPhone SE / older models */
+  @media (max-width: 380px) {
+    .header h1 { font-size: 19px; }
+    .nav-btn { padding: 13px 12px; font-size: 11px; }
+    .section-title { font-size: 20px; }
+    .container { padding: 20px 14px 80px; }
+  }
+
+  .col-block {
+    padding: 22px;
+    border-radius: 8px;
+  }
+
+  .col-block.avoid {
+    background: #fff8f8;
+    border: 1px solid #f5c6c6;
+  }
+
+  .col-block.seek {
+    background: #f6fbf6;
+    border: 1px solid #b8ddb8;
+  }
+
+  .col-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .col-header.avoid { color: #9b2c2c; }
+  .col-header.seek { color: #1a6b2c; }
+
+  .attribute-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 15px;
+  }
+
+  .attribute-row:last-child { border-bottom: none; }
+
+  .attr-icon { flex-shrink: 0; margin-top: 2px; font-size: 14px; }
+  .attr-name { font-weight: 500; color: var(--text); }
+  .attr-desc { color: var(--text-muted); font-size: 14px; }
+
+  /* Practice timeline */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(181,137,58,0.2));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 26px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 22px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--cream);
+    box-shadow: 0 0 0 1px var(--gold);
+  }
+
+  .timeline-time {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+
+  .timeline-body {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Talk outline */
+  .outline-block {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+
+  .outline-header {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     cursor: pointer;
+    background: var(--section-bg);
     user-select: none;
   }
-  .letter-input.same-cipher { background: var(--highlight-dim); border-bottom-color: var(--sepia); }
-  .letter-input.selected { background: rgba(240,192,64,0.55); border-bottom-color: var(--rust); }
-  .letter-input.correct { color: var(--correct); border-bottom-color: var(--correct); }
-  .letter-input.wrong { color: var(--wrong); border-bottom-color: var(--wrong); animation: shake 0.28s ease; }
-  .letter-input.revealed { color: var(--sepia); font-style: italic; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
-  .space-char { width: 14px; }
-  .punct-char { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(20px, 5.5vw, 28px); color: var(--ink); line-height: 1; align-self: flex-end; margin-bottom: 2px; }
-  .attribution { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 13px; color: #3a2400; font-weight: 700; text-align: right; margin-top: 10px; padding-top: 8px; border-top: 2px solid #3a2400; }
 
-  /* KEYBOARD */
-  .keyboard-section { background: #ddd0b0; border: 2px solid #0d0900; padding: 12px 8px 10px; box-shadow: 4px 4px 0 #4a3010; margin-bottom: 14px; }
-  .key-label { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #2a1800; font-weight: 700; margin-bottom: 10px; text-align: center; }
-  .keyboard-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
-  .key {
-    width: clamp(30px, 9vw, 52px);
-    height: clamp(48px, 13vw, 62px);
-    border: 2px solid #0d0900;
-    background: #ffffff;
-    color: #0d0900;
-    font-family: Consolas, 'Courier New', monospace;
-    font-size: clamp(16px, 4.5vw, 22px);
+  .outline-header:hover { background: rgba(181,137,58,0.1); }
+
+  .outline-number {
+    font-size: 11px;
+    color: var(--gold);
     font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .outline-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--text);
+  }
+
+  .outline-toggle {
+    color: var(--gold);
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+
+  .outline-toggle.open { transform: rotate(180deg); }
+
+  .outline-content {
+    padding: 18px 20px;
+    display: none;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+  }
+
+  .outline-content.open { display: block; }
+
+  .outline-content ul {
+    margin: 8px 0 8px 18px;
+  }
+
+  .outline-content li { margin-bottom: 5px; }
+
+  .outline-content .scripture-ref {
+    color: var(--gold);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  .outline-content .note {
+    background: #fffbf0;
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 14.5px;
+    color: var(--text-muted);
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Experiment journal */
+  .journal-area {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .journal-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .journal-textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    color: var(--text);
+    background: var(--cream);
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+
+  .journal-textarea:focus { border-color: var(--gold); }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
     cursor: pointer;
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.1s;
-    position: relative;
-    top: 0;
-    box-shadow: 0 3px 0 #0d0900;
-    -webkit-tap-highlight-color: transparent;
+    font-size: 13px;
+    color: var(--gold);
+    transition: background 0.15s;
     user-select: none;
   }
-  .key:active { background: #0d0900; color: #ffffff; top: 3px; box-shadow: none; }
-  .key.used { background: #888888; color: #ffffff; box-shadow: 0 2px 0 #333333; }
-  .key.backspace { width: clamp(52px, 15vw, 76px); font-size: 20px; }
-  .freq-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; padding-top: 8px; border-top: 1.5px dashed #5a3c10; justify-content: center; }
-  .freq-item { font-size: 11px; color: #3a2000; font-weight: 700; letter-spacing: 0.05em; }
-  .freq-item.sel { color: #7a2800; font-weight: 900; text-decoration: underline; }
+
+  .checklist-item.checked .check-box {
+    background: var(--gold);
+    color: white;
+  }
+
+  .check-label {
+    font-size: 15.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .check-label small {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Scripture quick-ref */
+  .scripture-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+
+  .scripture-table th {
+    text-align: left;
+    font-family: 'Crimson Pro', serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 14px;
+    background: var(--section-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scripture-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(181,137,58,0.1);
+    vertical-align: top;
+  }
+
+  .scripture-table tr:last-child td { border-bottom: none; }
+  .scripture-table tr:hover td { background: var(--section-bg); }
+
+  .ref-cell {
+    font-style: italic;
+    color: var(--gold);
+    font-size: 14px;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .topic-cell { font-weight: 500; color: var(--text); }
+  .desc-cell { color: var(--text-muted); }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0;
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* iPhone safe area — avoids notch and home bar */
+  .nav {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .container {
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+    padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+  }
+
+  /* Prevent double-tap zoom on buttons */
+  button { touch-action: manipulation; }
+
+  /* Prevent iOS from auto-zooming text inputs (font-size must be >= 16px) */
+  textarea, input { font-size: 16px !important; }
+
+  /* Smooth momentum scrolling on iOS */
+  .nav { -webkit-overflow-scrolling: touch; }
+
+
+  .save-notice {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .copy-btn {
+    display: block;
+    width: 100%;
+    background: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 24px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 4px;
+  }
+
+  .copy-btn:hover { background: var(--gold-light); }
+  .copy-btn:active { transform: scale(0.98); }
+
+  /* Highlight box */
+  .highlight-box {
+    background: linear-gradient(135deg, #fffbee, #fff8e0);
+    border: 1px solid rgba(181,137,58,0.3);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .highlight-box .hb-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .highlight-box .hb-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .highlight-box .hb-ref {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <span class="corner-deco left">✦</span>
-  <h1>Cryptogram</h1>
-  <div class="subtitle">Daily Cipher Puzzle &nbsp;·&nbsp; v1.6</div>
-  <span class="corner-deco right">✦</span>
+<div class="header">
+  <div class="header-eyebrow">Church Talk Research — Personal Study Tool</div>
+  <h1>Drawing Closer to God:<br>Attitudes, Barriers & Daily Practice</h1>
+  <div class="header-sub">Based on scriptural patterns — for your 15-minute talk preparation & personal experimentation</div>
 </div>
 
-<div class="cat-strip-wrap"><div class="cat-strip" id="catStrip"></div></div>
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+  <button class="nav-btn" onclick="showSection('avoid')">Attitudes to Avoid</button>
+  <button class="nav-btn" onclick="showSection('seek')">Attitudes to Seek</button>
+  <button class="nav-btn" onclick="showSection('practices')">Daily Practice</button>
+  <button class="nav-btn" onclick="showSection('scriptures')">Scripture Ref</button>
+  <button class="nav-btn" onclick="showSection('bodymindsoul')">Body–Mind–Spirit</button>
+  <button class="nav-btn" onclick="showSection('outline')">Talk Outline</button>
+  <button class="nav-btn" onclick="showSection('journal')">My Experiment</button>
+</nav>
 
-<div class="controls">
-  <button class="btn btn-primary" id="btnNew" onclick="fetchNewQuote()">▶ New Puzzle</button>
-  <button class="btn btn-secondary" id="btnReset" onclick="resetPuzzle()" disabled>↺ Reset</button>
-  <button class="btn btn-secondary" id="btnHint" onclick="giveHint()" disabled>💡 Hint</button>
-  <button class="btn btn-secondary" id="btnReveal" onclick="revealAll()" disabled>👁 Reveal</button>
-</div>
+<div class="container">
 
-<div class="stats-row">
-  <div class="stat-box"><div class="stat-num" id="statSolved">0</div><div class="stat-lbl">Solved</div></div>
-  <div class="stat-box"><div class="stat-num" id="statHints">0</div><div class="stat-lbl">Hints</div></div>
-  <div class="stat-box"><div class="stat-num" id="statTime">0:00</div><div class="stat-lbl">Time</div></div>
-  <div class="stat-box"><div class="stat-num" id="statPct">0%</div><div class="stat-lbl">Done</div></div>
-</div>
+  <!-- OVERVIEW -->
+  <div id="overview" class="section active">
+    <div class="section-title">The Heart Condition Framework</div>
+    <div class="section-intro">Scripture consistently describes drawing closer to God as a matter of heart posture — not just behavior. There are conditions that open the heart and conditions that close it. The talk builds around this axis.</div>
 
-<div id="winBanner" style="display:none" class="win-banner">
-  <h2>🎉 Puzzle Solved!</h2>
-  <p id="winMsg"></p>
-</div>
+    <div class="highlight-box">
+      <div class="hb-label">Central Scripture</div>
+      <div class="hb-text">"Ye shall offer for a sacrifice unto me a broken heart and a contrite spirit."</div>
+      <div class="hb-ref">3 Nephi 9:20 · Also Psalm 51:17 · Isaiah 57:15</div>
+    </div>
 
-<div class="puzzle-card">
-  <div class="status-bar">
-    <span id="statusLeft">Choose a category &amp; press New Puzzle</span>
-    <span id="statusRight"></span>
+    <div class="two-col">
+      <div class="col-block avoid">
+        <div class="col-header avoid">❌ Closed Heart — Distance from God</div>
+        <div style="font-size:14px; color:#9b2c2c; margin-bottom:10px;">Conditions that block spiritual growth</div>
+        <div class="attribute-row"><span class="attr-icon">🪨</span><div><div class="attr-name">Stiff-necked</div><div class="attr-desc">Refusing God's redirection; proud stubbornness</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🧱</span><div><div class="attr-name">Hard-hearted</div><div class="attr-desc">Resistant to the Spirit; emotional callousness</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🙈</span><div><div class="attr-name">Blind/Deaf spiritually</div><div class="attr-desc">Won't hear or see God's direction</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">👑</span><div><div class="attr-name">Proud / Haughty</div><div class="attr-desc">Self-sufficient; no need for God</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">😒</span><div><div class="attr-name">Murmuring</div><div class="attr-desc">Constant complaint; lack of trust</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">😶</span><div><div class="attr-name">Uncircumcised heart</div><div class="attr-desc">Inwardly unresponsive to God (Acts 7:51)</div></div></div>
+      </div>
+      <div class="col-block seek">
+        <div class="col-header seek">✅ Open Heart — Closeness to God</div>
+        <div style="font-size:14px; color:#1a6b2c; margin-bottom:10px;">Conditions that invite spiritual growth</div>
+        <div class="attribute-row"><span class="attr-icon">💔</span><div><div class="attr-name">Broken heart</div><div class="attr-desc">Fully open to God; sacrifices pride</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🌱</span><div><div class="attr-name">Contrite spirit</div><div class="attr-desc">Crushed of self-will; yields to God</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🕊️</span><div><div class="attr-name">Meek & lowly</div><div class="attr-desc">Teachable, patient, God-fearing</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🙏</span><div><div class="attr-name">Humble</div><div class="attr-desc">Acknowledges dependence on God</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">😲</span><div><div class="attr-name">Trembling at His word</div><div class="attr-desc">Deep reverence for scripture (Isa 66:2)</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🧒</span><div><div class="attr-name">As a little child</div><div class="attr-desc">Trusting, teachable, without guile</div></div></div>
+      </div>
+    </div>
+
+    <div class="divider">Key Insight</div>
+
+    <div class="highlight-box">
+      <div class="hb-label">A Fresh Way to Think About "Broken Heart"</div>
+      <div class="hb-text">A "broke" horse is not ruined — it's redeemed. It has learned the joy of moving as one with its master. God doesn't want to break us; He wants to "break" us free.</div>
+      <div class="hb-ref">Bishop L. Todd Budge, BYU Devotional — "The word for 'heart' in Hebrew means the inner man or will."</div>
+    </div>
+
+    <p style="font-size:15px; color: var(--text-muted); font-style:italic;">Use the tabs above to explore each dimension: the heart conditions to avoid, the ones to cultivate, the daily practices that reshape them, the key scriptures, a talk outline, and your personal experiment journal.</p>
   </div>
-  <div class="same-letter-tip" id="sameLetterTip"></div>
-  <div id="puzzleArea" class="loading-msg">Press "New Puzzle" to begin</div>
-  <div class="attribution" id="attribution" style="display:none"></div>
-</div>
 
-<div class="keyboard-section" id="keyboardSection" style="display:none">
-  <div class="key-label" id="keyLabel">Tap a cipher letter above, then tap a key below</div>
-  <div id="keyboard"></div>
-  <div class="freq-row" id="freqGrid"></div>
+  <!-- ATTITUDES TO AVOID -->
+  <div id="avoid" class="section">
+    <div class="section-title">Attitudes & Conditions to Avoid</div>
+    <div class="section-intro">These heart conditions appear repeatedly in scripture as barriers between us and God. They share a common theme: resistance, self-sufficiency, and refusal to yield.</div>
+
+    <div class="attitude-grid">
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Stiff-necked</div>
+        <div class="card-body">Stubborn, hard to lead. From the image of an ox that refuses the farmer's goad. Resists the Holy Spirit's redirection. Results in wandering — like 40 years in the wilderness.</div>
+        <div class="card-scripture">Exodus 33:3 · Acts 7:51 · 2 Chronicles 30:8 · Deut. 9:6</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Hard-hearted</div>
+        <div class="card-body">Emotional and spiritual callousness. The heart becomes unable to feel the Spirit's promptings. Often paired with "stiff-necked" — the outer stubbornness and inner unfeelingness work together.</div>
+        <div class="card-scripture">Mark 6:52 · Hebrews 3:13 · Ezekiel 11:19 · 2 Chronicles 36:13</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Pride / Haughtiness</div>
+        <div class="card-body">Feeling no need for God. "God is opposed to the proud, but gives grace to the humble." Pride creates spiritual distance — the proud person feels self-sufficient and misses God's guidance from afar.</div>
+        <div class="card-scripture">1 Peter 5:5 · Psalm 138:6 · Proverbs 18:12 · Prov. 29:23</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Spiritual Blindness & Deafness</div>
+        <div class="card-body">Uncircumcised in heart and ears — inwardly unresponsive. Unable to perceive spiritual things. Stephen's charge to those who rejected Christ: "You always resist the Holy Spirit."</div>
+        <div class="card-scripture">Acts 7:51 · Isaiah 6:10 · John 12:40 · Matthew 13:15</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Murmuring & Ingratitude</div>
+        <div class="card-body">Constant complaint signals distrust of God's love and plan. Murmuring was among the Israelites' most persistent failures. It closes the heart to gratitude, which is a key pathway to grace.</div>
+        <div class="card-scripture">1 Corinthians 10:10 · Numbers 14:27 · Philippians 2:14</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Leaning on Own Understanding</div>
+        <div class="card-body">Trusting exclusively in human reason rather than trusting God's wisdom. This is the opposite of the teachable spirit that invites revelation. Often subtle — we may not even notice we're doing it.</div>
+        <div class="card-scripture">Proverbs 3:5-6 · Isaiah 55:8-9 · Jeremiah 17:5</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Vain / Ritual-Only Worship</div>
+        <div class="card-body">Going through outward motions without a surrendered heart. God rebuked Israel: He desired a broken and contrite heart above burnt offerings. External compliance without internal transformation.</div>
+        <div class="card-scripture">Isaiah 1:11-15 · Psalm 51:16-17 · Matthew 15:8 · Amos 5:21</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Avoid</span>
+        <div class="card-title">Discouragement / Self-Reliance in Failure</div>
+        <div class="card-body">Discouragement is a hidden form of pride — it means we're relying entirely on ourselves. True humility means trusting God even when we fall short, rather than despairing at our own weakness.</div>
+        <div class="card-scripture">D&C 123:17 · Joshua 1:9 · Philippians 4:13</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ATTITUDES TO SEEK -->
+  <div id="seek" class="section">
+    <div class="section-title">Attitudes & Conditions to Seek</div>
+    <div class="section-intro">These are the conditions God promises to dwell with and respond to. Each is a form of opening — surrendering the natural man to make space for the divine.</div>
+
+    <div class="attitude-grid">
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Broken Heart (A "Broke" Heart)</div>
+        <div class="card-body">Not devastation — but willing surrender of will. Like a tamed horse that has found joy in moving with its master. Open to the Spirit of God; recognizes total dependence on Him. Protects against temptation.</div>
+        <div class="card-scripture">3 Nephi 9:20 · Psalm 51:17 · 2 Nephi 4:32 · Mosiah 4:12</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Contrite Spirit</div>
+        <div class="card-body">Hebrew: "crushed to dust." A willingness to totally submit to God's will, having crushed the natural man's instincts. No longer resisting the things of the Spirit but embracing them. "Godly sorrow" (2 Cor. 7:10).</div>
+        <div class="card-scripture">2 Corinthians 7:10 · Isaiah 57:15 · Psalm 34:18 · D&C 20:37</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Meekness</div>
+        <div class="card-body">Not weakness — controlled strength. "Godfearing, righteous, humble, teachable, and patient under suffering." Mormon taught that without meekness, faith and hope are vain. Jesus himself claimed to be meek and lowly.</div>
+        <div class="card-scripture">Matthew 11:29 · Moroni 7:44 · Galatians 5:22-23 · Numbers 12:3</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Humility</div>
+        <div class="card-body">Acknowledging dependence on God; not feeling small but making oneself small. "I dwell in the high and holy place, and also with the humble and contrite." God leads the humble by the hand and answers their prayers.</div>
+        <div class="card-scripture">Isaiah 57:15 · Psalm 25:9 · D&C 112:10 · James 4:10</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Trembling at His Word</div>
+        <div class="card-body">Deep reverence and receptivity to scripture. "To this one I will look: he who is humble, contrite in spirit, and trembles at My word." Openness to being changed by what God says — not just informed.</div>
+        <div class="card-scripture">Isaiah 66:2 · Ezra 9:4 · Psalm 119:120</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">As a Little Child</div>
+        <div class="card-body">Trusting, teachable, without pretense. "Except ye be converted and become as little children, ye shall not enter the kingdom." This attitude believes, asks without embarrassment, and receives without pride.</div>
+        <div class="card-scripture">Matthew 18:3 · 3 Nephi 9:22 · Mosiah 3:19 · Mark 10:15</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Lowly of Heart</div>
+        <div class="card-body">A deep inner poverty of spirit — not self-deprecation, but genuine dependence. The Beatitudes begin here: "Blessed are the poor in spirit." God regards the lowly; the haughty He knows from afar.</div>
+        <div class="card-scripture">Matthew 5:3 · Psalm 138:6 · Isaiah 66:2 · Luke 1:52</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Seek</span>
+        <div class="card-title">Gratitude & Praise</div>
+        <div class="card-body">A thankful heart is an open heart. Gratitude for Christ's suffering on our behalf is listed as a dimension of a broken heart. It softens us, redirects focus from self to God, and is itself an act of worship.</div>
+        <div class="card-scripture">D&C 59:7 · Psalm 100:4 · 1 Thessalonians 5:18 · Col. 3:15</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DAILY PRACTICE -->
+  <div id="practices" class="section">
+    <div class="section-title">Daily Practices That Cultivate the Right Heart</div>
+    <div class="section-intro">Attitudes aren't just willed into existence — they're cultivated through consistent daily practice. These are the practices with the strongest scriptural and practical support for reshaping the heart over time.</div>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-time">Morning — Set the heart's direction</div>
+        <div class="timeline-title">Sincere Prayer — Yielding, Not Requesting</div>
+        <div class="timeline-body">Begin by acknowledging your dependence on God rather than launching into requests. The Hebrew word for "heart" in scripture means the inner man or will — so prayer is literally re-orienting your will toward God. Try beginning with: <em>"I yield my will to Thee today."</em><br><br>
+        <strong>Key posture:</strong> Not monologue but genuine listening. "Put difficult questions in the back of your minds and go about your lives. Ponder and pray quietly and persistently." (Boyd K. Packer)</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">Morning or Evening — Tremble at His Word</div>
+        <div class="timeline-title">Scripture Study — With Intent to Be Changed</div>
+        <div class="timeline-body">Read with the question: <em>"What does God want me to do differently today because of this?"</em> — not just for information but for transformation. Isaiah 66:2 says God looks to those who "tremble at my word." This is more than reverence — it's readiness to act.<br><br>
+        <strong>Practical tip:</strong> Even 5 minutes of genuinely prayerful scripture reading outweighs 30 minutes of passive reading. Write one thing you noticed.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">Weekly or Monthly — Deepen Dependence</div>
+        <div class="timeline-title">Fasting — Submitting the Natural Man</div>
+        <div class="timeline-body">Fasting is specifically designed to humble the body so the spirit can lead. After 24 hours without food, the body submits to the spirit — and sensitivity to the Holy Ghost increases. It trains the flesh to obey rather than dominate.<br><br>
+        <strong>Key insight:</strong> "Fasting is not a way to get a better response to prayer. Rather, it is a means of fostering a humbler <em>approach</em> to prayer." (Cru) — It changes us, not God.<br><br>
+        <strong>Principle:</strong> Begin and end with prayer; fast with a specific purpose.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">Daily — Practice Surrender in Small Things</div>
+        <div class="timeline-title">Repentance as a Daily Posture (Not Just Crisis Management)</div>
+        <div class="timeline-body">Repentance isn't only for major sins — it's the daily practice of checking our hearts. Bishop Budge's four-word pattern from horse training: <strong>Desire → Inquire → Require → Retire.</strong><br><br>
+        Desire what God desires. Inquire of Him. Do what He requires. And retire — rest in His arms rather than running wild through life alone.<br><br>
+        This is the "broken heart as daily shield" — Nephi prayed, <em>"May the gates of hell be shut before me, because that my heart is broken and my spirit is contrite!"</em> (2 Nephi 4:32)</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">Ongoing — Cultivate Meekness Through Others</div>
+        <div class="timeline-title">Service & Forbearance</div>
+        <div class="timeline-body">Meekness grows in relationship. Paul connects meekness to "bearing with one another in love" (Eph. 4:2). Serving others without seeking credit, listening rather than talking, honoring others above ourselves — these are the daily exercises that reshape pride into humility.<br><br>
+        <strong>Connection:</strong> Fasting is also linked to compassion for others — Isaiah 58 pairs fasting with feeding the hungry and freeing the oppressed. Outward service and inward softening reinforce each other.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">Key Insight — The Physical/Psychological/Spiritual Unity</div>
+        <div class="timeline-title">The Body Matters: Posture, Breath, and Stillness</div>
+        <div class="timeline-body">Stiff-necked and hard-hearted are described in scripture as physical, psychological, and spiritual conditions simultaneously. This means the body participates in the heart's posture. Kneeling, bowing the head, fasting — these physical acts aren't theater; they participate in cultivating the inner condition.<br><br>
+        <strong>Experiment idea:</strong> Try noticing moments in prayer or study when your body stiffens, and consciously relax. Notice whether your heart follows.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPTURE REFERENCE -->
+  <div id="scriptures" class="section">
+    <div class="section-title">Scripture Quick-Reference</div>
+    <div class="section-intro">Key scriptures organized by theme for talk preparation. Each can be used as an anchor for a section of your talk.</div>
+
+    <table class="scripture-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Topic</th>
+          <th>Key Idea</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="ref-cell">3 Nephi 9:19–20</td>
+          <td class="topic-cell">Broken heart & contrite spirit</td>
+          <td class="desc-cell">Christ replaces burnt offerings with the offering of the heart; promises baptism of fire to those who come with broken hearts.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Psalm 51:16–17</td>
+          <td class="topic-cell">Broken & contrite heart</td>
+          <td class="desc-cell">David: "A broken and contrite heart, O God, thou wilt not despise." The foundation of this teaching predates Christ.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Isaiah 57:15</td>
+          <td class="topic-cell">God dwells with the humble</td>
+          <td class="desc-cell">"I dwell in the high and holy place, and also with the contrite and lowly of spirit." God comes down to meet the humble.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Isaiah 66:2</td>
+          <td class="topic-cell">Trembling at His word</td>
+          <td class="desc-cell">"To this one I will look: he who is humble, contrite in spirit, and trembles at My word." Receptivity to scripture is central.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Matthew 11:28–30</td>
+          <td class="topic-cell">Meek & lowly</td>
+          <td class="desc-cell">Christ's own self-description: "I am meek and lowly in heart." His yoke is easy because humility is the key to receiving His grace.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Acts 7:51</td>
+          <td class="topic-cell">Stiff-necked warning</td>
+          <td class="desc-cell">Stephen: "You stiff-necked people! Your hearts and ears are still uncircumcised. You always resist the Holy Spirit."</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">2 Chronicles 30:8</td>
+          <td class="topic-cell">Don't be stiff-necked</td>
+          <td class="desc-cell">"Do not be stiff-necked, as your ancestors were; submit to the LORD." The invitation is always to yield.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Proverbs 3:5–6</td>
+          <td class="topic-cell">Trust vs. self-reliance</td>
+          <td class="desc-cell">"Trust in the Lord with all your heart, and lean not on your own understanding." The antidote to prideful self-sufficiency.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Mosiah 3:19</td>
+          <td class="topic-cell">Natural man vs. child</td>
+          <td class="desc-cell">The natural man is an enemy to God; we must yield to the Holy Ghost and become "as a child, submissive, meek, humble, patient."</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">2 Nephi 4:32</td>
+          <td class="topic-cell">Broken heart as shield</td>
+          <td class="desc-cell">Nephi's prayer: "May the gates of hell be shut before me, because my heart is broken and my spirit is contrite." Daily protection.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Micah 6:8</td>
+          <td class="topic-cell">What God requires</td>
+          <td class="desc-cell">"Do justice, love kindness, and walk humbly with your God." A complete summary of the right attitude.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Isaiah 58:6–11</td>
+          <td class="topic-cell">Fasting promise</td>
+          <td class="desc-cell">God's promised blessings to those who fast rightly: freedom from bondage, answered prayer, continual guidance, and flourishing.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Hebrews 3:13</td>
+          <td class="topic-cell">Daily softening</td>
+          <td class="desc-cell">"Exhort one another daily… lest any of you be hardened through the deceitfulness of sin." A hard heart grows slowly — so must the soft one.</td>
+        </tr>
+        <tr>
+          <td class="ref-cell">Matthew 18:3</td>
+          <td class="topic-cell">As a little child</td>
+          <td class="desc-cell">"Unless you are converted and become as little children, you will not enter the kingdom of heaven." Teachability is non-negotiable.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BODY–MIND–SPIRIT: STRESS, STARTLE & THE SOFT NECK -->
+  <div id="bodymindsoul" class="section">
+    <div class="section-title">Body–Mind–Spirit: The Stress–Hardness Connection</div>
+    <div class="section-intro">One of the most original angles of this talk: scripture's language of stiff necks and hard hearts is not merely metaphorical — it maps directly onto real physiology. Chronic stress literally hardens us, physically and spiritually. And disciplines from the Alexander Technique to martial arts have discovered the antidote.</div>
+
+    <div class="highlight-box">
+      <div class="hb-label">The Central Connection</div>
+      <div class="hb-text">Stiff-necked is not just an ancient insult. It describes a real physical state — the startle reflex frozen in place — that shuts down our receptivity to everything, including the Spirit.</div>
+      <div class="hb-ref">Connects Exodus 33:3 · Acts 7:51 · Alexander Technique research · Frank Pierce Jones, Tufts University (1976)</div>
+    </div>
+
+    <!-- Chain of causation -->
+    <div class="section-title" style="font-size:20px; margin-bottom:10px;">The Chain: Stress → Startle → Stiff-neck → Hard Heart</div>
+    <div style="margin-bottom:28px;">
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-time">Step 1 — The Trigger</div>
+          <div class="timeline-title">Chronic Stress Puts Us in Permanent Fight-or-Flight</div>
+          <div class="timeline-body">
+            When a threat is perceived, the hypothalamus triggers a cascade of hormones — adrenaline and cortisol — that raise heart rate, tighten muscles, and prepare the body to fight or flee. This response is designed to be temporary. But when stressors are always present and you always feel under attack, the fight-or-flight reaction stays turned on. The result: chronic stress induces sustained activation of the sympathetic nervous system, leading to elevated cortisol and epinephrine, promoting oxidative stress, inflammation, and dysfunction throughout the body.
+            <br><br>
+            <strong>Spiritual parallel:</strong> A person under chronic stress is physiologically primed to resist, contract, and shut down. This is the same internal state as "stiff-necked."
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-time">Step 2 — The Body's Response</div>
+          <div class="timeline-title">The Startle Reflex — Stiff-Neck Made Visible</div>
+          <div class="timeline-body">
+            The startle pattern follows a specific sequence: the muscles of the neck contract, pulling the head back and jamming it down onto the spine. The ribs and shoulders tighten and narrow, the chest flattens, and the legs flex — all completed in about half a second.
+            <br><br>
+            The more anxious and stressed a person is, the more frequently they tend to over-react to situations with this pattern of flinching and contracting. Some people habitually live with their muscles held in a contracted manner, echoing their previous responses to alarming situations.
+            <br><br>
+            <strong>Key insight:</strong> Most people's habitual way of moving seems to resemble a permanent, modified startle pattern — which clearly interferes with their ability to move, breathe, think, or feel in an alert, integrated, healthy way. This is chronic stiff-neckedness — a body locked in resistance.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-time">Step 3 — The Spiritual Cost</div>
+          <div class="timeline-title">A "Stone Heart" — Spiritual Receptivity Shuts Down</div>
+          <div class="timeline-body">
+            Ezekiel 11:19 speaks of the "heart of stone" that God promises to replace with a "heart of flesh." A stone heart is the spiritual equivalent of a body locked in chronic startle — rigid, defended, closed to any input that might require change or vulnerability.
+            <br><br>
+            The startle/stress response suppresses the very faculties needed for spiritual receptivity: open attention, stillness, the capacity to feel, and the parasympathetic "rest-and-receive" state. You literally cannot be spiritually receptive while your nervous system is screaming danger.
+            <br><br>
+            <strong>The chain:</strong> Unresolved stress → habitual startle posture → contracted neck and chest → suppressed parasympathetic system → inability to feel the Spirit → spiritual hardness that <em>feels like indifference</em> but may actually be exhaustion and defended pain.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-time">Step 4 — The Antidote</div>
+          <div class="timeline-title">Soft Neck, Open Heart — The Parasympathetic Pathway</div>
+          <div class="timeline-body">
+            Controlled breathing can significantly affect the autonomic nervous system, particularly by engaging the parasympathetic branch — responsible for the body's rest-and-digest response. This activation counteracts the stress response mediated by the sympathetic nervous system.
+            <br><br>
+            Research shows that psychosocial factors like positive emotions, cognitive flexibility, religion and spirituality, life meaning, social support, and active coping are protective ways to boost the body's resiliency to cope with stress.
+            <br><br>
+            <strong>The pathway to openness:</strong> Practices that soften the neck and lengthen the spine — slow breath, prayerful stillness, kneeling, gentle movement — literally shift the nervous system into the state where the heart can be reached.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Alexander Technique -->
+    <div class="divider">The Alexander Technique</div>
+
+    <div class="two-col">
+      <div class="col-block seek" style="background:#f0f4ff; border-color:#b8c8dd;">
+        <div class="col-header" style="color:#1a3060;">📐 What Alexander Discovered</div>
+        <div class="attribute-row"><span class="attr-icon">🔑</span><div><div class="attr-name">The Primary Control</div><div class="attr-desc">Alexander showed that the mechanism determining the character of all reflex action lies in the reflexes governing the relation of the head to the neck. Freedom here enables everything else.</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🧠</span><div><div class="attr-name">Stress Patterns as Habit</div><div class="attr-desc">Fear, anxiety, fatigue, and pain all show postural changes similar to those in startle — there is a shortening of neck muscles which displaces the head. These become habitual.</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">✋</span><div><div class="attr-name">Inhibition — Choosing Not to React</div><div class="attr-desc">The technique focuses on learning what NOT to do first — becoming aware of, releasing, and refraining from harmful habits of muscle use. It's unlearning, not doing.</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🕊️</span><div><div class="attr-name">Spiritual Echo</div><div class="attr-desc">"Choose to be quiet throughout your whole body, with particular reference to the head and neck." — Margaret Goldie, Alexander teacher. This is the body's version of "be still and know."</div></div></div>
+      </div>
+
+      <div class="col-block seek" style="background:#f5f0ff; border-color:#c8b8dd;">
+        <div class="col-header" style="color:#3a1060;">⚔️ Martial Arts — Shoshin (Beginner's Mind)</div>
+        <div class="attribute-row"><span class="attr-icon">🌱</span><div><div class="attr-name">Shoshin — 初心</div><div class="attr-desc">Shoshin (Japanese: 初心) means "beginner's mind" — having an attitude of openness, eagerness, and lack of preconceptions when studying, even at an advanced level.</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🧱</span><div><div class="attr-name">The "Cement" of Expertise</div><div class="attr-desc">As you advance in rank, the mental "cement" can begin to harden and set, becoming closed-minded. The more expertise you accumulate, the more you tend to block contradictory information.</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">🧒</span><div><div class="attr-name">Many Possibilities</div><div class="attr-desc">Shunryū Suzuki: "In the beginner's mind there are many possibilities, but in the expert's mind there are few." The same contrast as "stiff-necked expert" vs. "teachable child."</div></div></div>
+        <div class="attribute-row"><span class="attr-icon">✨</span><div><div class="attr-name">Senshin — Enlightened Mind</div><div class="attr-desc">Senshin represents a state of spiritual awakening — transcending ego and achieving inner clarity. Physical techniques flow naturally without conscious thought or hesitation.</div></div></div>
+      </div>
+    </div>
+
+    <!-- The synthesis -->
+    <div class="divider">The Synthesis for Your Talk</div>
+
+    <div class="highlight-box">
+      <div class="hb-label">A New Way to Frame the Physical + Spiritual Unity</div>
+      <div class="hb-text">"Stiff-necked" is not an ancient insult — it is an ancient diagnosis. It names a condition that science now maps precisely: a nervous system locked in threat response, incapable of the openness required to receive. The spiritual practices God commands — stillness, kneeling, deep breath, yielding — are not merely symbolic. They are the very actions that shift us out of the startle state and into the condition where we can hear, feel, and be changed.</div>
+      <div class="hb-ref">Synthesis of Alexander Technique research, stress physiology, martial arts philosophy, and scripture</div>
+    </div>
+
+    <div class="attitude-grid">
+
+      <div class="card">
+        <span class="card-badge badge-avoid">Stress → Hardness</span>
+        <div class="card-title">The Stone Heart (Ezekiel 11:19)</div>
+        <div class="card-body">Chronic unresolved stress creates a physiological "stone heart" — defended, contracted, numbed. This isn't just spiritual failure; it's an exhausted nervous system that has learned to close off. God's promise is to replace it with a "heart of flesh" — responsive, soft, alive.</div>
+        <div class="card-scripture">Ezekiel 11:19 · Ezekiel 36:26 · Hebrews 3:13</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Practice</span>
+        <div class="card-title">The Soft Neck as Spiritual Practice</div>
+        <div class="card-body">Consciously releasing the neck and shoulders during prayer is not self-help theater — it participates in shifting the nervous system into the parasympathetic state where spiritual receptivity is possible. The Alexander principle: "neck free, head forward and up" is the opposite of the startle pattern — and the opposite of stiff-necked.</div>
+        <div class="card-scripture">Psalm 46:10 · 1 Kings 19:12 (still small voice)</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Practice</span>
+        <div class="card-title">Curiosity as a Spiritual Discipline</div>
+        <div class="card-body">Shoshin — beginner's mind — is strikingly parallel to "as a little child." Both describe an approach to God that is open, eager, without preconceptions. The closed expert mind and the stiff-necked Israelite share the same root: "I already know what God will say, and I'm not sure I want to hear it."</div>
+        <div class="card-scripture">Matthew 18:3 · 3 Nephi 9:22 · Isaiah 66:2</div>
+      </div>
+
+      <div class="card">
+        <span class="card-badge badge-seek">Research</span>
+        <div class="card-title">Religion Lowers Cortisol — Science Confirms</div>
+        <div class="card-body">Participants with higher religiosity, levels of forgiveness, and frequency of prayer showed lower cortisol responses to stress. The practices that open the heart spiritually also measurably reduce the physiological hardening that stress produces. The two pathways are one.</div>
+        <div class="card-scripture">Isaiah 26:3 · Philippians 4:7 — "the peace of God which passeth all understanding"</div>
+      </div>
+
+    </div>
+
+    <div class="highlight-box" style="background: linear-gradient(135deg, #f0f4ff, #eef5ff); border-color: rgba(60,100,180,0.2);">
+      <div class="hb-label">Talk Application — The Experiment to Suggest</div>
+      <div class="hb-text">Before your next prayer, pause. Notice where your neck and shoulders are. Gently release them. Take one slow breath. Then begin. Notice whether anything is different. This is not yoga — it is the body participating in the spiritual posture of surrender.</div>
+      <div class="hb-ref">Practical exercise drawn from Alexander Technique + stress physiology + scriptural pattern of kneeling and bowing</div>
+    </div>
+
+  </div>
+
+  <!-- TALK OUTLINE -->
+  <div id="outline" class="section">
+    <div class="section-title">15-Minute Talk Outline</div>
+    <div class="section-intro">A suggested structure based on your research. Click each section to expand. Total: ~15 minutes when delivered at a natural pace (approx. 1,500–1,700 words spoken).</div>
+
+    <div class="outline-block">
+      <div class="outline-header" onclick="toggleOutline(this)">
+        <div>
+          <div class="outline-number">Section 1 · ~2 min</div>
+          <div class="outline-section-title">Hook: The Heart Condition We All Share</div>
+        </div>
+        <span class="outline-toggle">▾</span>
+      </div>
+      <div class="outline-content">
+        <p>Open with a relatable moment of spiritual dullness — a prayer that felt hollow, scripture study that felt routine. Ask: <em>What separates us from God? Is it behavior — or something deeper?</em></p>
+        <div class="note">💡 Personal experiment angle: "I've been testing this on myself. I want to share what I found."</div>
+        <p>Introduce the talk's thesis: <strong>Scripture describes closeness to God not primarily as a behavior problem but a heart condition. And there's a daily practice that changes the condition.</strong></p>
+      </div>
+    </div>
+
+    <div class="outline-block">
+      <div class="outline-header" onclick="toggleOutline(this)">
+        <div>
+          <div class="outline-number">Section 2 · ~3 min</div>
+          <div class="outline-section-title">The Closed Heart: Stiff-Necked & Hard-Hearted</div>
+        </div>
+        <span class="outline-toggle">▾</span>
+      </div>
+      <div class="outline-content">
+        <p>Explain the origin of "stiff-necked" — the ox that resists the farmer's goad. It's a vivid, funny, relatable image.</p>
+        <ul>
+          <li>The ox isn't evil — just stubborn. So are we.</li>
+          <li>When God tries to redirect us (through promptings, scripture, life circumstances), stiffening our neck means we don't turn.</li>
+        </ul>
+        <p class="scripture-ref">Acts 7:51 — "You always resist the Holy Spirit."</p>
+        <p>Then connect: hard-heartedness is the internal version of the same problem — the heart becomes calloused and stops feeling the Spirit.</p>
+        <div class="note">💡 Rhetorical question: "When was the last time you felt the Spirit clearly? If it's been a while — what might have hardened?"</div>
+        <p>Briefly name the other closed-heart conditions: pride, murmuring, leaning on our own understanding.</p>
+      </div>
+    </div>
+
+    <div class="outline-block">
+      <div class="outline-header" onclick="toggleOutline(this)">
+        <div>
+          <div class="outline-number">Section 3 · ~3 min</div>
+          <div class="outline-section-title">The Open Heart: Broken, Contrite, Meek</div>
+        </div>
+        <span class="outline-toggle">▾</span>
+      </div>
+      <div class="outline-content">
+        <p>Use the "broke horse" analogy (Bishop Budge). The word "broke" describes a horse that has discovered the joy and freedom of moving as one with its master — not broken, but redeemed.</p>
+        <p class="scripture-ref">3 Nephi 9:20 — The Lord's new sacrifice: "a broken heart and a contrite spirit."</p>
+        <ul>
+          <li>Broken heart = open; recognizes dependence on God; sacrifices pride in all its forms</li>
+          <li>Contrite spirit = Hebrew "crushed to dust"; the natural man's instincts have been surrendered</li>
+          <li>Meek = God-fearing, teachable, patient; meekness is not weakness — it's controlled strength</li>
+        </ul>
+        <p class="scripture-ref">Isaiah 57:15 — "I dwell with the contrite and lowly of spirit in order to revive their heart."</p>
+        <div class="note">💡 The reward is not just forgiveness — it's that God comes to dwell with you. That's a different life entirely.</div>
+      </div>
+    </div>
+
+    <div class="outline-block">
+      <div class="outline-header" onclick="toggleOutline(this)">
+        <div>
+          <div class="outline-number">Section 4 · ~4 min</div>
+          <div class="outline-section-title">The Daily Practice: How to Cultivate the Right Heart</div>
+        </div>
+        <span class="outline-toggle">▾</span>
+      </div>
+      <div class="outline-content">
+        <p>The critical insight: these heart conditions aren't achieved once and kept forever. They are cultivated daily. Hebrews 3:13 says to "exhort one another daily, lest any of you be hardened."</p>
+        <p><strong>Three practices scripture consistently links to softening the heart:</strong></p>
+        <ul>
+          <li><strong>Prayer with a yielded will</strong> — Not a wish list, but a daily re-orientation of the will toward God. "I yield my will to Thee."</li>
+          <li><strong>Scripture with trembling</strong> — Not just reading, but receiving. Isaiah 66:2: God looks to the one who "trembles at my word." Ask: "What does God want to change in me today?"</li>
+          <li><strong>Fasting</strong> — Specifically designed to humble the body so the spirit can lead. It changes us, not God. It's how we practice submitting the natural man.</li>
+        </ul>
+        <div class="note">💡 Personal experiment: share one specific thing you noticed when you tried any of these with intentionality this week.</div>
+        <p>Bishop Budge's four words: <strong>Desire → Inquire → Require → Retire.</strong> Desire what God desires. Ask Him. Do what He asks. And rest in His arms — stop running wild.</p>
+      </div>
+    </div>
+
+    <div class="outline-block">
+      <div class="outline-header" onclick="toggleOutline(this)">
+        <div>
+          <div class="outline-number">Section 5 · ~3 min</div>
+          <div class="outline-section-title">Close: The Invitation & Promise</div>
+        </div>
+        <span class="outline-toggle">▾</span>
+      </div>
+      <div class="outline-content">
+        <p>Return to the opening image. The distance we feel from God is usually not His withdrawal — it's a heart condition we have developed, often gradually, through hardening.</p>
+        <p>The invitation of the gospel is always: <em>yield. Turn. Give God the reins.</em></p>
+        <p class="scripture-ref">2 Nephi 4:32 (Nephi's personal prayer) — "May the gates of hell be shut before me, because my heart is broken and my spirit is contrite." This is the daily shield.</p>
+        <p>Close with a specific invitation to the congregation — choose one practice for the coming week:</p>
+        <ul>
+          <li>Begin each prayer by yielding your will before making requests</li>
+          <li>Read one scripture passage slowly enough to feel it — and write one change it invites</li>
+          <li>Fast next fast Sunday with a specific heart-softening purpose</li>
+        </ul>
+        <p class="scripture-ref">Micah 6:8 — "What does the Lord require of you but to do justice, love kindness, and walk humbly with your God?"</p>
+        <div class="note">💡 Testimony: share what this practice has cost you and what it has given you.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONAL EXPERIMENT JOURNAL -->
+  <div id="journal" class="section">
+    <div class="section-title">My Personal Experiment Journal</div>
+    <div class="section-intro">You mentioned testing this on yourself. Use this space to track observations, moments, and insights from your daily practice — raw material for your talk's personal stories.</div>
+
+    <div class="journal-area">
+      <div class="journal-label">Daily Practice Checklist</div>
+      <div id="checklist">
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Morning prayer — yielded my will before making requests
+            <small>Did I start with surrender, or immediately ask for things?</small>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Scripture study — read to be changed, not just informed
+            <small>What one thing does God want to change in me today?</small>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Noticed a moment where I stiffened/resisted today
+            <small>A prompting ignored, a correction refused, a complaint that arose</small>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Acted on a spiritual prompting — however small
+            <small>Did what God required, rather than what I felt like doing</small>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Expressed genuine gratitude (not just recited thanks)
+            <small>Felt thankfulness for Christ's sacrifice or God's hand today</small>
+          </div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Fasting practice (weekly/monthly)
+            <small>Began and ended with prayer; fasted with a specific purpose</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal-area">
+      <div class="journal-label">Observations — What I'm Noticing</div>
+      <textarea class="journal-textarea" placeholder="Write what you're noticing as you experiment with these practices... What's hard? What's surprising? What moments would work in a talk?"></textarea>
+    </div>
+
+    <div class="journal-area">
+      <div class="journal-label">Personal Story to Use in Talk</div>
+      <textarea class="journal-textarea" placeholder="Describe a specific moment — a time you felt stiff-necked, or a time a practice softened you. A real story will land better than any theological explanation..."></textarea>
+    </div>
+
+    <div class="journal-area">
+      <div class="journal-label">Invitation to Congregation — My Specific Ask</div>
+      <textarea class="journal-textarea" placeholder="What one practical thing will you invite your congregation to try this week? The more specific, the more likely someone will actually do it..." style="min-height:70px;"></textarea>
+    </div>
+
+    <div class="save-notice">Notes are stored in your browser session — use the button below to copy them before closing.</div>
+
+    <button class="copy-btn" onclick="copyNotes()" id="copyBtn">
+      📋 Copy All Notes to Clipboard
+    </button>
+
+  </div>
+
 </div>
 
 <script>
-const CATEGORIES = [
-  { id:'philosophical', label:'Philosophical',  tags:['philosophy','wisdom'],          apiTags:'philosophy' },
-  { id:'statesman',     label:'Statesman',       tags:['leadership','politics'],        apiTags:'leadership' },
-  { id:'biblical',      label:'Scripture',       tags:['religion','faith'],             apiTags:'religion' },
-  { id:'comedic',       label:'Comedic / Witty', tags:['humor','happiness'],            apiTags:'humor' },
-  { id:'literary',      label:'Literary',        tags:['literature','writing'],         apiTags:'literature' },
-  { id:'scientific',    label:'Scientific',      tags:['science','technology'],         apiTags:'science' },
-  { id:'stoic',         label:'Stoic & Ancient', tags:['philosophy','wisdom'],          apiTags:'philosophy' },
-  { id:'eastern',       label:'Eastern Wisdom',  tags:['wisdom','spirituality'],        apiTags:'wisdom' },
-  { id:'art',           label:'Art & Creativity',tags:['art','creativity'],             apiTags:'art' },
-  { id:'presidents',    label:'US Presidents',   tags:['leadership','history'],         apiTags:'history' },
-];
-
-// Large built-in quote bank — used when API unavailable, shuffled randomly
-const QUOTE_BANK = {
-  philosophical:[
-    {q:'THE UNEXAMINED LIFE IS NOT WORTH LIVING.',author:'Socrates'},
-    {q:'WE ARE WHAT WE REPEATEDLY DO. EXCELLENCE THEN IS NOT AN ACT BUT A HABIT.',author:'Aristotle'},
-    {q:'THE ONLY TRUE WISDOM IS IN KNOWING YOU KNOW NOTHING.',author:'Socrates'},
-    {q:'MAN IS THE MEASURE OF ALL THINGS.',author:'Protagoras'},
-    {q:'HAPPINESS IS NOT SOMETHING READY MADE. IT COMES FROM YOUR OWN ACTIONS.',author:'Dalai Lama'},
-    {q:'TO BE IS TO DO.',author:'Immanuel Kant'},
-    {q:'DOUBT IS THE ORIGIN OF WISDOM.',author:'Rene Descartes'},
-    {q:'GOD IS DEAD. GOD REMAINS DEAD. AND WE HAVE KILLED HIM.',author:'Friedrich Nietzsche'},
-    {q:'THAT WHICH DOES NOT KILL US MAKES US STRONGER.',author:'Friedrich Nietzsche'},
-    {q:'HELL IS OTHER PEOPLE.',author:'Jean-Paul Sartre'},
-    {q:'THE FUNCTION OF PRAYER IS NOT TO INFLUENCE GOD BUT RATHER TO CHANGE THE NATURE OF THE ONE WHO PRAYS.',author:'Soren Kierkegaard'},
-    {q:'ONE CANNOT STEP INTO THE SAME RIVER TWICE.',author:'Heraclitus'},
-    {q:'GIVE ME LIBERTY OR GIVE ME DEATH.',author:'Patrick Henry'},
-    {q:'I THINK THEREFORE I AM.',author:'Rene Descartes'},
-    {q:'THE GREATEST WEALTH IS TO LIVE CONTENT WITH LITTLE.',author:'Plato'},
-  ],
-  statesman:[
-    {q:'ASK NOT WHAT YOUR COUNTRY CAN DO FOR YOU ASK WHAT YOU CAN DO FOR YOUR COUNTRY.',author:'John F. Kennedy'},
-    {q:'IN THE END IT IS NOT THE YEARS IN YOUR LIFE THAT COUNT BUT THE LIFE IN YOUR YEARS.',author:'Abraham Lincoln'},
-    {q:'WE SHALL FIGHT ON THE BEACHES WE SHALL FIGHT ON THE LANDING GROUNDS WE SHALL NEVER SURRENDER.',author:'Winston Churchill'},
-    {q:'THE BALLOT IS STRONGER THAN THE BULLET.',author:'Abraham Lincoln'},
-    {q:'AN APPEASER IS ONE WHO FEEDS A CROCODILE HOPING IT WILL EAT HIM LAST.',author:'Winston Churchill'},
-    {q:'A NATION THAT FORGETS ITS PAST HAS NO FUTURE.',author:'Winston Churchill'},
-    {q:'NEARLY ALL MEN CAN STAND ADVERSITY BUT IF YOU WANT TO TEST A MANS CHARACTER GIVE HIM POWER.',author:'Abraham Lincoln'},
-    {q:'THE PRICE OF GREATNESS IS RESPONSIBILITY.',author:'Winston Churchill'},
-    {q:'ASSOCIATE YOURSELF WITH MEN OF GOOD QUALITY IF YOU ESTEEM YOUR OWN REPUTATION.',author:'George Washington'},
-    {q:'THE TIME IS ALWAYS RIGHT TO DO WHAT IS RIGHT.',author:'Martin Luther King Jr.'},
-    {q:'INJUSTICE ANYWHERE IS A THREAT TO JUSTICE EVERYWHERE.',author:'Martin Luther King Jr.'},
-    {q:'SPEAK SOFTLY AND CARRY A BIG STICK.',author:'Theodore Roosevelt'},
-    {q:'DO WHAT YOU CAN WITH WHAT YOU HAVE WHERE YOU ARE.',author:'Theodore Roosevelt'},
-    {q:'THE ONLY THING WE HAVE TO FEAR IS FEAR ITSELF.',author:'Franklin D. Roosevelt'},
-  ],
-  biblical:[
-    // ── Old Testament Scripture Mastery (25) ──
-    {q:'IN THE BEGINNING GOD CREATED THE HEAVEN AND THE EARTH.',author:'Genesis 1:1'},
-    {q:'AND GOD SAID LET THERE BE LIGHT AND THERE WAS LIGHT.',author:'Genesis 1:3'},
-    {q:'SO GOD CREATED MAN IN HIS OWN IMAGE IN THE IMAGE OF GOD CREATED HE HIM.',author:'Genesis 1:27'},
-    {q:'THEREFORE SHALL A MAN LEAVE HIS FATHER AND HIS MOTHER AND SHALL CLEAVE UNTO HIS WIFE.',author:'Genesis 2:24'},
-    {q:'I AM THE LORD THY GOD THOU SHALT HAVE NO OTHER GODS BEFORE ME.',author:'Exodus 20:3'},
-    {q:'THOU SHALT LOVE THE LORD THY GOD WITH ALL THINE HEART AND WITH ALL THY SOUL AND WITH ALL THY MIGHT.',author:'Deuteronomy 6:5'},
-    {q:'HEAR O ISRAEL THE LORD OUR GOD IS ONE LORD.',author:'Deuteronomy 6:4'},
-    {q:'BE STRONG AND OF A GOOD COURAGE BE NOT AFRAID NEITHER BE THOU DISMAYED.',author:'Joshua 1:9'},
-    {q:'CHOOSE YOU THIS DAY WHOM YE WILL SERVE AS FOR ME AND MY HOUSE WE WILL SERVE THE LORD.',author:'Joshua 24:15'},
-    {q:'THE LORD SEETH NOT AS MAN SEETH FOR MAN LOOKETH ON THE OUTWARD APPEARANCE BUT THE LORD LOOKETH ON THE HEART.',author:'1 Samuel 16:7'},
-    {q:'TRUST IN THE LORD WITH ALL THINE HEART AND LEAN NOT UNTO THINE OWN UNDERSTANDING.',author:'Proverbs 3:5-6'},
-    {q:'TRAIN UP A CHILD IN THE WAY HE SHOULD GO AND WHEN HE IS OLD HE WILL NOT DEPART FROM IT.',author:'Proverbs 22:6'},
-    {q:'REMEMBER NOW THY CREATOR IN THE DAYS OF THY YOUTH.',author:'Ecclesiastes 12:1'},
-    {q:'FOR UNTO US A CHILD IS BORN UNTO US A SON IS GIVEN AND HIS NAME SHALL BE CALLED WONDERFUL COUNSELLOR THE MIGHTY GOD.',author:'Isaiah 9:6'},
-    {q:'BUT THEY THAT WAIT UPON THE LORD SHALL RENEW THEIR STRENGTH THEY SHALL MOUNT UP WITH WINGS AS EAGLES.',author:'Isaiah 40:31'},
-    {q:'FEAR THOU NOT FOR I AM WITH THEE BE NOT DISMAYED FOR I AM THY GOD.',author:'Isaiah 41:10'},
-    {q:'BUT HE WAS WOUNDED FOR OUR TRANSGRESSIONS HE WAS BRUISED FOR OUR INIQUITIES.',author:'Isaiah 53:5'},
-    {q:'FOR MY THOUGHTS ARE NOT YOUR THOUGHTS NEITHER ARE YOUR WAYS MY WAYS SAITH THE LORD.',author:'Isaiah 55:8'},
-    {q:'BEFORE I FORMED THEE IN THE BELLY I KNEW THEE.',author:'Jeremiah 1:5'},
-    {q:'BEHOLD THE DAYS COME SAITH THE LORD THAT I WILL MAKE A NEW COVENANT WITH THE HOUSE OF ISRAEL.',author:'Jeremiah 31:31'},
-    {q:'I WILL PUT MY SPIRIT WITHIN YOU AND CAUSE YOU TO WALK IN MY STATUTES.',author:'Ezekiel 36:27'},
-    {q:'WILL A MAN ROB GOD YET YE HAVE ROBBED ME. BRING YE ALL THE TITHES INTO THE STOREHOUSE.',author:'Malachi 3:8-10'},
-    {q:'BEHOLD I WILL SEND YOU ELIJAH THE PROPHET BEFORE THE GREAT AND DREADFUL DAY OF THE LORD.',author:'Malachi 4:5-6'},
-    {q:'THE LORD IS MY SHEPHERD I SHALL NOT WANT.',author:'Psalm 23:1'},
-    {q:'CREATE IN ME A CLEAN HEART O GOD AND RENEW A RIGHT SPIRIT WITHIN ME.',author:'Psalm 51:10'},
-    // ── New Testament Scripture Mastery (25) ──
-    {q:'BLESSED ARE THE PURE IN HEART FOR THEY SHALL SEE GOD.',author:'Matthew 5:8'},
-    {q:'ASK AND IT SHALL BE GIVEN YOU SEEK AND YE SHALL FIND.',author:'Matthew 7:7'},
-    {q:'COME UNTO ME ALL YE THAT LABOUR AND ARE HEAVY LADEN AND I WILL GIVE YOU REST.',author:'Matthew 11:28-30'},
-    {q:'THOU SHALT LOVE THE LORD THY GOD WITH ALL THY HEART AND WITH ALL THY SOUL AND WITH ALL THY MIND.',author:'Matthew 22:37-39'},
-    {q:'GO YE THEREFORE AND TEACH ALL NATIONS BAPTIZING THEM IN THE NAME OF THE FATHER AND OF THE SON AND OF THE HOLY GHOST.',author:'Matthew 28:19-20'},
-    {q:'FOR GOD SO LOVED THE WORLD THAT HE GAVE HIS ONLY BEGOTTEN SON.',author:'John 3:16'},
-    {q:'I AM THE RESURRECTION AND THE LIFE HE THAT BELIEVETH IN ME THOUGH HE WERE DEAD YET SHALL HE LIVE.',author:'John 11:25-26'},
-    {q:'AND THIS IS LIFE ETERNAL THAT THEY MIGHT KNOW THEE THE ONLY TRUE GOD AND JESUS CHRIST WHOM THOU HAST SENT.',author:'John 17:3'},
-    {q:'IF YE LOVE ME KEEP MY COMMANDMENTS.',author:'John 14:15'},
-    {q:'I AM THE WAY THE TRUTH AND THE LIFE NO MAN COMETH UNTO THE FATHER BUT BY ME.',author:'John 14:6'},
-    {q:'BUT YE SHALL RECEIVE POWER AFTER THAT THE HOLY GHOST IS COME UPON YOU.',author:'Acts 1:8'},
-    {q:'FOR ALL HAVE SINNED AND COME SHORT OF THE GLORY OF GOD.',author:'Romans 3:23'},
-    {q:'FOR I AM NOT ASHAMED OF THE GOSPEL OF CHRIST FOR IT IS THE POWER OF GOD UNTO SALVATION.',author:'Romans 1:16'},
-    {q:'AND BE NOT CONFORMED TO THIS WORLD BUT BE YE TRANSFORMED BY THE RENEWING OF YOUR MIND.',author:'Romans 12:2'},
-    {q:'FOR THE WAGES OF SIN IS DEATH BUT THE GIFT OF GOD IS ETERNAL LIFE THROUGH JESUS CHRIST OUR LORD.',author:'Romans 6:23'},
-    {q:'I CAN DO ALL THINGS THROUGH CHRIST WHICH STRENGTHENETH ME.',author:'Philippians 4:13'},
-    {q:'FOR GOD HATH NOT GIVEN US THE SPIRIT OF FEAR BUT OF POWER AND OF LOVE AND OF A SOUND MIND.',author:'2 Timothy 1:7'},
-    {q:'ALL SCRIPTURE IS GIVEN BY INSPIRATION OF GOD AND IS PROFITABLE FOR DOCTRINE.',author:'2 Timothy 3:16-17'},
-    {q:'IF ANY OF YOU LACK WISDOM LET HIM ASK OF GOD THAT GIVETH TO ALL MEN LIBERALLY.',author:'James 1:5'},
-    {q:'FAITH WITHOUT WORKS IS DEAD.',author:'James 2:17-18'},
-    {q:'WE LOVE HIM BECAUSE HE FIRST LOVED US.',author:'1 John 4:19'},
-    {q:'WHAT SHALL IT PROFIT A MAN IF HE SHALL GAIN THE WHOLE WORLD AND LOSE HIS OWN SOUL.',author:'Mark 8:36'},
-    {q:'FOR BEHOLD THE KINGDOM OF GOD IS WITHIN YOU.',author:'Luke 17:21'},
-    {q:'AND THE WORD WAS MADE FLESH AND DWELT AMONG US AND WE BEHELD HIS GLORY.',author:'John 1:14'},
-    {q:'NEITHER IS THERE SALVATION IN ANY OTHER FOR THERE IS NONE OTHER NAME UNDER HEAVEN GIVEN AMONG MEN WHEREBY WE MUST BE SAVED.',author:'Acts 4:12'},
-    // ── Book of Mormon Scripture Mastery (25) ──
-    {q:'I WILL GO AND DO THE THINGS WHICH THE LORD HATH COMMANDED.',author:'1 Nephi 3:7'},
-    {q:'FOR IT MUST NEEDS BE THAT THERE IS AN OPPOSITION IN ALL THINGS.',author:'2 Nephi 2:11'},
-    {q:'ADAM FELL THAT MEN MIGHT BE AND MEN ARE THAT THEY MIGHT HAVE JOY.',author:'2 Nephi 2:25'},
-    {q:'FEAST UPON THE WORDS OF CHRIST FOR BEHOLD THE WORDS OF CHRIST WILL TELL YOU ALL THINGS WHAT YE SHOULD DO.',author:'2 Nephi 32:3'},
-    {q:'COUNSEL WITH THE LORD IN ALL THY DOINGS AND HE WILL DIRECT THEE FOR GOOD.',author:'Alma 37:37'},
-    {q:'BY SMALL AND SIMPLE THINGS ARE GREAT THINGS BROUGHT TO PASS.',author:'Alma 37:6'},
-    {q:'WICKEDNESS NEVER WAS HAPPINESS.',author:'Alma 41:10'},
-    {q:'LET US CHEERFULLY DO ALL THINGS THAT LIE IN OUR POWER AND THEN MAY WE STAND STILL WITH THE UTMOST ASSURANCE TO SEE THE SALVATION OF GOD.',author:'Doctrine and Covenants 123:17'},
-    {q:'FOR THE NATURAL MAN IS AN ENEMY TO GOD AND HAS BEEN FROM THE FALL OF ADAM.',author:'Mosiah 3:19'},
-    {q:'REMEMBER THAT IT IS UPON THE ROCK OF OUR REDEEMER THAT YE MUST BUILD YOUR FOUNDATION.',author:'Helaman 5:12'},
-    {q:'AND NOW I WOULD THAT YE SHOULD REMEMBER THAT THE LORD GOD ORDAINED PRIESTS BEFORE THE WORLD WAS.',author:'Alma 13:3'},
-    {q:'NOW FAITH IS THE SUBSTANCE OF THINGS HOPED FOR THE EVIDENCE OF THINGS NOT SEEN.',author:'Hebrews 11:1'},
-    {q:'COME UNTO CHRIST AND BE PERFECTED IN HIM AND DENY YOURSELVES OF ALL UNGODLINESS.',author:'Moroni 10:32'},
-    {q:'AND BY THE POWER OF THE HOLY GHOST YE MAY KNOW THE TRUTH OF ALL THINGS.',author:'Moroni 10:5'},
-    {q:'BEHOLD I WOULD EXHORT YOU THAT WHEN YE SHALL READ THESE THINGS IF IT BE WISDOM IN GOD THAT YE SHOULD READ THEM.',author:'Moroni 10:3'},
-    {q:'THE SPIRIT OF CHRIST IS GIVEN TO EVERY MAN THAT HE MAY KNOW GOOD FROM EVIL.',author:'Moroni 7:16'},
-    {q:'THEREFORE CHEER UP YOUR HEARTS AND REMEMBER THAT YE ARE FREE TO ACT FOR YOURSELVES.',author:'2 Nephi 10:23'},
-    {q:'FOR BEHOLD THIS IS MY WORK AND MY GLORY TO BRING TO PASS THE IMMORTALITY AND ETERNAL LIFE OF MAN.',author:'Moses 1:39'},
-    {q:'AND NOW BEHOLD I ASK OF YOU MY BRETHREN OF THE CHURCH HAVE YE SPIRITUALLY BEEN BORN OF GOD.',author:'Alma 5:14'},
-    {q:'LOOK TO GOD AND LIVE.',author:'Alma 37:47'},
-    {q:'YEAST TRUST NO ONE TO BE YOUR TEACHER NOR YOUR MINISTER EXCEPT HE BE A MAN OF GOD.',author:'Mosiah 23:14'},
-    {q:'FOR BEHOLD THE LORD DOTH GRANT UNTO ALL NATIONS OF THEIR OWN NATION AND TONGUE TO TEACH HIS WORD.',author:'Alma 29:8'},
-    {q:'AND THUS WE SEE THAT BY SMALL MEANS THE LORD CAN BRING ABOUT GREAT THINGS.',author:'1 Nephi 16:29'},
-    {q:'BLESSED ARE ALL THE PURE IN HEART FOR THEY SHALL SEE GOD.',author:'3 Nephi 12:8'},
-    {q:'THEREFORE WHOSOEVER HEARETH THESE SAYINGS OF MINE AND DOETH THEM I WILL LIKEN HIM UNTO A WISE MAN.',author:'3 Nephi 14:24'},
-    // ── Doctrine and Covenants Scripture Mastery (25) ──
-    {q:'THIS IS MY WORK AND MY GLORY TO BRING TO PASS THE IMMORTALITY AND ETERNAL LIFE OF MAN.',author:'Moses 1:39'},
-    {q:'WE BELIEVE IN GOD THE ETERNAL FATHER AND IN HIS SON JESUS CHRIST AND IN THE HOLY GHOST.',author:'Articles of Faith 1:1'},
-    {q:'THE GLORY OF GOD IS INTELLIGENCE OR IN OTHER WORDS LIGHT AND TRUTH.',author:'Doctrine and Covenants 93:36'},
-    {q:'IF YE ARE PREPARED YE SHALL NOT FEAR.',author:'Doctrine and Covenants 38:30'},
-    {q:'THE WORTH OF SOULS IS GREAT IN THE SIGHT OF GOD.',author:'Doctrine and Covenants 18:10'},
-    {q:'SEEK LEARNING EVEN BY STUDY AND ALSO BY FAITH.',author:'Doctrine and Covenants 88:118'},
-    {q:'WHATEVER PRINCIPLE OF INTELLIGENCE WE ATTAIN UNTO IN THIS LIFE IT WILL RISE WITH US IN THE RESURRECTION.',author:'Doctrine and Covenants 130:18'},
-    {q:'NO POWER OR INFLUENCE CAN OR OUGHT TO BE MAINTAINED BY VIRTUE OF THE PRIESTHOOD ONLY BY PERSUASION BY LONG SUFFERING BY GENTLENESS AND MEEKNESS.',author:'Doctrine and Covenants 121:41'},
-    {q:'LET VIRTUE GARNISH THY THOUGHTS UNCEASINGLY.',author:'Doctrine and Covenants 121:45'},
-    {q:'PRAY ALWAYS THAT YOU MAY COME OFF CONQUEROR.',author:'Doctrine and Covenants 10:5'},
-    {q:'BEHOLD I STAND AT THE DOOR AND KNOCK IF ANY MAN HEAR MY VOICE AND OPEN THE DOOR I WILL COME IN TO HIM.',author:'Revelation 3:20'},
-    {q:'THE FAMILY IS ORDAINED OF GOD AND IS CENTRAL TO THE CREATORS PLAN.',author:'The Family: A Proclamation'},
-    {q:'I JOSEPH SMITH JR RECEIVED THE FIRST VISION IN THE SPRING OF EIGHTEEN TWENTY.',author:'Joseph Smith History 1:17'},
-    {q:'WE BELIEVE THE BIBLE TO BE THE WORD OF GOD AS FAR AS IT IS TRANSLATED CORRECTLY.',author:'Articles of Faith 1:8'},
-    {q:'WE CLAIM THE PRIVILEGE OF WORSHIPING ALMIGHTY GOD ACCORDING TO THE DICTATES OF OUR OWN CONSCIENCE.',author:'Articles of Faith 1:11'},
-    {q:'DOUBT NOT FEAR NOT.',author:'Doctrine and Covenants 6:36'},
-    {q:'BEHOLD THOU ART JOSEPH AND THOU WAST CHOSEN TO DO THE WORK OF THE LORD.',author:'Doctrine and Covenants 3:9'},
-    {q:'AND IF MEN COME UNTO ME I WILL SHOW UNTO THEM THEIR WEAKNESS.',author:'Ether 12:27'},
-    {q:'FOR BEHOLD IT IS NOT MEET THAT I SHOULD COMMAND IN ALL THINGS.',author:'Doctrine and Covenants 58:26'},
-    {q:'I THE LORD AM BOUND WHEN YE DO WHAT I SAY BUT WHEN YE DO NOT WHAT I SAY YE HAVE NO PROMISE.',author:'Doctrine and Covenants 82:10'},
-    {q:'THE LORD REQUIRETH THE HEART AND A WILLING MIND.',author:'Doctrine and Covenants 64:34'},
-    {q:'VERILY I SAY UNTO YOU MY FRIENDS I LEAVE THESE SAYINGS WITH YOU TO PONDER IN YOUR HEARTS.',author:'Doctrine and Covenants 88:62'},
-    {q:'THAT WHICH IS OF GOD IS LIGHT AND HE THAT RECEIVETH LIGHT AND CONTINUETH IN GOD RECEIVETH MORE LIGHT.',author:'Doctrine and Covenants 50:24'},
-    {q:'FOR BEHOLD THE LORD YOUR REDEEMER SUFFERED DEATH IN THE FLESH WHEREFORE HE SUFFERED THE PAIN OF ALL MEN.',author:'Doctrine and Covenants 18:11'},
-    {q:'SEARCH THESE COMMANDMENTS FOR THEY ARE TRUE AND FAITHFUL.',author:'Doctrine and Covenants 1:37'},
-  ],
-  comedic:[
-    {q:'THE REPORTS OF MY DEATH HAVE BEEN GREATLY EXAGGERATED.',author:'Mark Twain'},
-    {q:'I CAN RESIST EVERYTHING EXCEPT TEMPTATION.',author:'Oscar Wilde'},
-    {q:'THE TRUTH IS RARELY PURE AND NEVER SIMPLE.',author:'Oscar Wilde'},
-    {q:'BE YOURSELF. EVERYONE ELSE IS ALREADY TAKEN.',author:'Oscar Wilde'},
-    {q:'I HAVE NOTHING TO DECLARE EXCEPT MY GENIUS.',author:'Oscar Wilde'},
-    {q:'GET YOUR FACTS FIRST THEN YOU CAN DISTORT THEM AS YOU PLEASE.',author:'Mark Twain'},
-    {q:'AGE IS AN ISSUE OF MIND OVER MATTER. IF YOU DONT MIND IT DOESNT MATTER.',author:'Mark Twain'},
-    {q:'A DAY WITHOUT LAUGHTER IS A DAY WASTED.',author:'Charlie Chaplin'},
-    {q:'BEHIND EVERY GREAT MAN IS A WOMAN ROLLING HER EYES.',author:'Jim Carrey'},
-    {q:'OUTSIDE OF A DOG A BOOK IS A MANS BEST FRIEND. INSIDE OF A DOG IT IS TOO DARK TO READ.',author:'Groucho Marx'},
-    {q:'I AM NOT AFRAID OF DEATH I JUST DONT WANT TO BE THERE WHEN IT HAPPENS.',author:'Woody Allen'},
-    {q:'LIFE IS SHORT. SMILE WHILE YOU STILL HAVE TEETH.',author:'Mallory Hopkins'},
-    {q:'IF AT FIRST YOU DONT SUCCEED THEN SKYDIVING DEFINITELY IS NOT FOR YOU.',author:'Steven Wright'},
-    {q:'A BANK IS A PLACE THAT WILL LEND YOU MONEY IF YOU CAN PROVE THAT YOU DONT NEED IT.',author:'Bob Hope'},
-    {q:'WISDOM COMES FROM EXPERIENCE AND EXPERIENCE COMES FROM LACK OF WISDOM.',author:'Terry Pratchett'},
-  ],
-  literary:[
-    {q:'ALL THE WORLD IS A STAGE AND ALL THE MEN AND WOMEN MERELY PLAYERS.',author:'William Shakespeare'},
-    {q:'TO BE OR NOT TO BE THAT IS THE QUESTION.',author:'William Shakespeare'},
-    {q:'IT WAS THE BEST OF TIMES IT WAS THE WORST OF TIMES.',author:'Charles Dickens'},
-    {q:'NOT ALL THOSE WHO WANDER ARE LOST.',author:'J.R.R. Tolkien'},
-    {q:'IT IS A TRUTH UNIVERSALLY ACKNOWLEDGED THAT A SINGLE MAN IN POSSESSION OF A GOOD FORTUNE MUST BE IN WANT OF A WIFE.',author:'Jane Austen'},
-    {q:'ALL HAPPY FAMILIES ARE ALIKE EACH UNHAPPY FAMILY IS UNHAPPY IN ITS OWN WAY.',author:'Leo Tolstoy'},
-    {q:'THERE IS NO GREATER AGONY THAN BEARING AN UNTOLD STORY INSIDE YOU.',author:'Maya Angelou'},
-    {q:'A READER LIVES A THOUSAND LIVES BEFORE HE DIES. THE MAN WHO NEVER READS LIVES ONLY ONE.',author:'George R.R. Martin'},
-    {q:'THE WORLD IS A BOOK AND THOSE WHO DO NOT TRAVEL READ ONLY ONE PAGE.',author:'Saint Augustine'},
-    {q:'IF YOU ONLY READ THE BOOKS THAT EVERYONE ELSE IS READING YOU CAN ONLY THINK WHAT EVERYONE ELSE IS THINKING.',author:'Haruki Murakami'},
-    {q:'SO IT GOES.',author:'Kurt Vonnegut'},
-    {q:'CALL ME ISHMAEL.',author:'Herman Melville'},
-    {q:'WHATEVER OUR SOULS ARE MADE OF HIS AND MINE ARE THE SAME.',author:'Emily Bronte'},
-    {q:'I AM NOT AFRAID OF STORMS FOR I AM LEARNING HOW TO SAIL MY SHIP.',author:'Louisa May Alcott'},
-  ],
-  scientific:[
-    {q:'IMAGINATION IS MORE IMPORTANT THAN KNOWLEDGE.',author:'Albert Einstein'},
-    {q:'THE IMPORTANT THING IS NOT TO STOP QUESTIONING.',author:'Albert Einstein'},
-    {q:'IN SCIENCE THERE ARE NO SHORTCUTS TO TRUTH.',author:'Karl Popper'},
-    {q:'SCIENCE IS ORGANIZED KNOWLEDGE. WISDOM IS ORGANIZED LIFE.',author:'Immanuel Kant'},
-    {q:'THE GOOD THING ABOUT SCIENCE IS THAT IT IS TRUE WHETHER OR NOT YOU BELIEVE IN IT.',author:'Neil deGrasse Tyson'},
-    {q:'I HAVE NO SPECIAL TALENT. I AM ONLY PASSIONATELY CURIOUS.',author:'Albert Einstein'},
-    {q:'TWO THINGS ARE INFINITE. THE UNIVERSE AND HUMAN STUPIDITY. AND I AM NOT SURE ABOUT THE UNIVERSE.',author:'Albert Einstein'},
-    {q:'IF I HAVE SEEN FURTHER IT IS BY STANDING ON THE SHOULDERS OF GIANTS.',author:'Isaac Newton'},
-    {q:'SOMEWHERE SOMETHING INCREDIBLE IS WAITING TO BE KNOWN.',author:'Carl Sagan'},
-    {q:'THE COSMOS IS WITHIN US. WE ARE MADE OF STAR STUFF.',author:'Carl Sagan'},
-    {q:'LOOK AGAIN AT THAT DOT. THAT IS HERE. THAT IS HOME. THAT IS US.',author:'Carl Sagan'},
-    {q:'WE ARE ALL CONNECTED TO EACH OTHER BIOLOGICALLY TO THE EARTH CHEMICALLY AND TO THE REST OF THE UNIVERSE ATOMICALLY.',author:'Neil deGrasse Tyson'},
-    {q:'THE MOST BEAUTIFUL THING WE CAN EXPERIENCE IS THE MYSTERIOUS.',author:'Albert Einstein'},
-    {q:'SCIENCE IS THE POETRY OF REALITY.',author:'Richard Dawkins'},
-  ],
-  stoic:[
-    {q:'YOU HAVE POWER OVER YOUR MIND NOT OUTSIDE EVENTS. REALIZE THIS AND YOU WILL FIND STRENGTH.',author:'Marcus Aurelius'},
-    {q:'THE IMPEDIMENT TO ACTION ADVANCES ACTION. WHAT STANDS IN THE WAY BECOMES THE WAY.',author:'Marcus Aurelius'},
-    {q:'WASTE NO MORE TIME ARGUING WHAT A GOOD MAN SHOULD BE. BE ONE.',author:'Marcus Aurelius'},
-    {q:'WE SUFFER MORE IN IMAGINATION THAN IN REALITY.',author:'Seneca'},
-    {q:'IT IS NOT THE MAN WHO HAS TOO LITTLE BUT THE MAN WHO CRAVES MORE THAT IS POOR.',author:'Seneca'},
-    {q:'BEGIN AT ONCE TO LIVE AND COUNT EACH SEPARATE DAY AS A SEPARATE LIFE.',author:'Seneca'},
-    {q:'HE WHO FEARS DEATH WILL NEVER DO ANYTHING WORTHY OF A MAN WHO IS ALIVE.',author:'Seneca'},
-    {q:'MAKE THE BEST USE OF WHAT IS IN YOUR POWER AND TAKE THE REST AS IT HAPPENS.',author:'Epictetus'},
-    {q:'MEN ARE DISTURBED NOT BY THINGS BUT BY THEIR OPINIONS ABOUT THINGS.',author:'Epictetus'},
-    {q:'SEEK NOT THAT THE THINGS WHICH HAPPEN SHOULD HAPPEN AS YOU WISH.',author:'Epictetus'},
-    {q:'KNOW THYSELF.',author:'Socrates'},
-    {q:'THINK LIKE A MAN OF ACTION ACT LIKE A MAN OF THOUGHT.',author:'Henri Bergson'},
-    {q:'LIFE IS LONG IF YOU KNOW HOW TO USE IT.',author:'Seneca'},
-    {q:'HE SUFFERS MORE THAN NECESSARY WHO SUFFERS BEFORE IT IS NECESSARY.',author:'Seneca'},
-  ],
-  eastern:[
-    {q:'THE JOURNEY OF A THOUSAND MILES BEGINS WITH A SINGLE STEP.',author:'Lao Tzu'},
-    {q:'KNOWING OTHERS IS WISDOM. KNOWING YOURSELF IS ENLIGHTENMENT.',author:'Lao Tzu'},
-    {q:'WHEN YOU REALIZE THERE IS NOTHING LACKING THE WHOLE WORLD BELONGS TO YOU.',author:'Lao Tzu'},
-    {q:'IT DOES NOT MATTER HOW SLOWLY YOU GO AS LONG AS YOU DO NOT STOP.',author:'Confucius'},
-    {q:'LIFE IS REALLY SIMPLE BUT WE INSIST ON MAKING IT COMPLICATED.',author:'Confucius'},
-    {q:'OUR GREATEST GLORY IS NOT IN NEVER FALLING BUT IN RISING EVERY TIME WE FALL.',author:'Confucius'},
-    {q:'BEFORE ENLIGHTENMENT CHOP WOOD CARRY WATER. AFTER ENLIGHTENMENT CHOP WOOD CARRY WATER.',author:'Zen Proverb'},
-    {q:'THREE THINGS CANNOT BE LONG HIDDEN. THE SUN THE MOON AND THE TRUTH.',author:'Buddha'},
-    {q:'PEACE COMES FROM WITHIN. DO NOT SEEK IT WITHOUT.',author:'Buddha'},
-    {q:'DO NOT DWELL IN THE PAST DO NOT DREAM OF THE FUTURE CONCENTRATE THE MIND ON THE PRESENT MOMENT.',author:'Buddha'},
-    {q:'IN THE MIDDLE OF DIFFICULTY LIES OPPORTUNITY.',author:'Albert Einstein'},
-    {q:'THE SUPREME GOOD IS LIKE WATER WHICH NOURISHES ALL THINGS WITHOUT TRYING TO.',author:'Lao Tzu'},
-    {q:'IF YOU CORRECT YOUR MIND THE REST OF YOUR LIFE WILL FALL INTO PLACE.',author:'Lao Tzu'},
-    {q:'VICTORIOUS WARRIORS WIN FIRST AND THEN GO TO WAR.',author:'Sun Tzu'},
-  ],
-  art:[
-    {q:'EVERY CHILD IS AN ARTIST. THE PROBLEM IS HOW TO REMAIN AN ARTIST ONCE WE GROW UP.',author:'Pablo Picasso'},
-    {q:'ART WASHES AWAY FROM THE SOUL THE DUST OF EVERYDAY LIFE.',author:'Pablo Picasso'},
-    {q:'CREATIVITY IS INTELLIGENCE HAVING FUN.',author:'Albert Einstein'},
-    {q:'I SAW THE ANGEL IN THE MARBLE AND CARVED UNTIL I SET HIM FREE.',author:'Michelangelo'},
-    {q:'AN ARTIST IS NOT PAID FOR HIS LABOR BUT FOR HIS VISION.',author:'James Whistler'},
-    {q:'THE ARTIST IS NOTHING WITHOUT THE GIFT BUT THE GIFT IS NOTHING WITHOUT WORK.',author:'Emile Zola'},
-    {q:'I PAINT MY OWN REALITY.',author:'Frida Kahlo'},
-    {q:'IF I COULD SAY IT IN WORDS THERE WOULD BE NO REASON TO PAINT.',author:'Edward Hopper'},
-    {q:'THE PURPOSE OF ART IS WASHING THE DUST OF DAILY LIFE OFF OUR SOULS.',author:'Pablo Picasso'},
-    {q:'EVERY ARTIST DIPS HIS BRUSH IN HIS OWN SOUL AND PAINTS HIS OWN NATURE INTO HIS PICTURES.',author:'Henry Ward Beecher'},
-    {q:'TO CREATE ONE MUST FIRST QUESTION EVERYTHING.',author:'Eileen Gray'},
-    {q:'LEARN THE RULES LIKE A PRO SO YOU CAN BREAK THEM LIKE AN ARTIST.',author:'Pablo Picasso'},
-    {q:'ART ENABLES US TO FIND OURSELVES AND LOSE OURSELVES AT THE SAME TIME.',author:'Thomas Merton'},
-    {q:'THE PAINTING HAS A LIFE OF ITS OWN. I TRY TO LET IT COME THROUGH.',author:'Jackson Pollock'},
-  ],
-  presidents:[
-    {q:'ASK NOT WHAT YOUR COUNTRY CAN DO FOR YOU ASK WHAT YOU CAN DO FOR YOUR COUNTRY.',author:'John F. Kennedy'},
-    {q:'THE ONLY THING WE HAVE TO FEAR IS FEAR ITSELF.',author:'Franklin D. Roosevelt'},
-    {q:'GOVERNMENT OF THE PEOPLE BY THE PEOPLE FOR THE PEOPLE SHALL NOT PERISH FROM THE EARTH.',author:'Abraham Lincoln'},
-    {q:'SPEAK SOFTLY AND CARRY A BIG STICK.',author:'Theodore Roosevelt'},
-    {q:'AMERICA WAS NOT BUILT ON FEAR. AMERICA WAS BUILT ON COURAGE ON IMAGINATION AND UNBEATABLE DETERMINATION.',author:'Harry S. Truman'},
-    {q:'CHANGE WILL NOT COME IF WE WAIT FOR SOME OTHER PERSON OR SOME OTHER TIME.',author:'Barack Obama'},
-    {q:'IF YOUR ACTIONS INSPIRE OTHERS TO DREAM MORE LEARN MORE DO MORE AND BECOME MORE YOU ARE A LEADER.',author:'John Quincy Adams'},
-    {q:'FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS BROUGHT FORTH ON THIS CONTINENT A NEW NATION.',author:'Abraham Lincoln'},
-    {q:'THE BUCK STOPS HERE.',author:'Harry S. Truman'},
-    {q:'PEACE CANNOT BE KEPT BY FORCE. IT CAN ONLY BE ACHIEVED BY UNDERSTANDING.',author:'Dwight D. Eisenhower'},
-    {q:'WE MUST BE THE GREAT ARSENAL OF DEMOCRACY.',author:'Franklin D. Roosevelt'},
-    {q:'THERE IS NOTHING WRONG WITH AMERICA THAT CANNOT BE CURED BY WHAT IS RIGHT WITH AMERICA.',author:'Bill Clinton'},
-    {q:'WHEN YOU COME TO THE END OF YOUR ROPE TIE A KNOT AND HANG ON.',author:'Franklin D. Roosevelt'},
-    {q:'THE ADVANCE OF LIBERTY IS THE PATH TO BOTH A SAFER AND BETTER WORLD.',author:'George W. Bush'},
-  ],
-};
-
-// Tracks which quote bank indices have been used per category this session
-const USED_INDICES = {};
-
-const KB_ROWS = [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['Z','X','C','V','B','N','M','⌫']];
-
-let S = {
-  cipher:{}, decipher:{}, guesses:{},
-  plainText:'', author:'', tokens:[],
-  selectedCipher:null, solved:false,
-  hintsUsed:0, totalSolved:0,
-  startTime:null, timerInterval:null,
-  revealedLetters:new Set(),
-  activeCategory:'philosophical',
-
-};
-
-/* ── CATEGORY STRIP ── */
-(function buildStrip(){
-  const strip = document.getElementById('catStrip');
-  CATEGORIES.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'cat-btn' + (cat.id === S.activeCategory ? ' active' : '');
-    btn.textContent = cat.label;
-    btn.onclick = () => {
-      S.activeCategory = cat.id;
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    };
-    strip.appendChild(btn);
-  });
-})();
-
-/* ── FETCH QUOTE ── */
-/* Strategy:
-   1. Try quotable.io public API - real random quotes by tag, totally free
-   2. If offline/unavailable, draw randomly from the built-in QUOTE_BANK
-      using USED_INDICES to avoid repeating within the session
-*/
-async function fetchNewQuote() {
-  clearTimer();
-  document.getElementById('winBanner').style.display = 'none';
-  document.getElementById('btnHint').disabled = true;
-  document.getElementById('btnReveal').disabled = true;
-  document.getElementById('keyboardSection').style.display = 'none';
-  document.getElementById('attribution').style.display = 'none';
-  document.getElementById('sameLetterTip').textContent = '';
-  document.getElementById('puzzleArea').innerHTML = '<div class="loading-msg">Fetching quote...</div>';
-  document.getElementById('statusLeft').textContent = 'Loading...';
-  document.getElementById('statusRight').textContent = '';
-
-  const cat = CATEGORIES.find(c => c.id === S.activeCategory);
-
-  // Try quotable.io first - fetch quotes and pick a random one from the page
-  try {
-    const skip = Math.floor(Math.random() * 80);
-    const url = 'https://api.quotable.io/quotes?tags=' + cat.apiTags + '&limit=50&skip=' + skip + '&minLength=40&maxLength=140';
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('API error');
-    const data = await res.json();
-    const results = data.results || [];
-    if (results.length === 0) throw new Error('No results');
-
-    // Pick a random quote from the returned page
-    const pick = results[Math.floor(Math.random() * results.length)];
-    let q = pick.content.toUpperCase()
-      .replace(/[\u2018\u2019']/g, '')
-      .replace(/[\u201C\u201D]/g, '')
-      .replace(/[^A-Z0-9 .,!?]/g, '')
-      .trim();
-    buildPuzzle(q, pick.author);
-    return;
-  } catch(e) {
-    // Fall through to built-in bank
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 80, behavior: 'smooth' });
   }
 
-  // Built-in bank fallback - pick randomly, no repeats until bank exhausted
-  const bank = QUOTE_BANK[S.activeCategory] || QUOTE_BANK.philosophical;
-  if (!USED_INDICES[S.activeCategory]) USED_INDICES[S.activeCategory] = [];
-  let used = USED_INDICES[S.activeCategory];
-
-  // Reset if all used
-  if (used.length >= bank.length) USED_INDICES[S.activeCategory] = used = [];
-
-  // Pick a random unused index
-  const available = bank.map(function(_,i){ return i; }).filter(function(i){ return !used.includes(i); });
-  const idx = available[Math.floor(Math.random() * available.length)];
-  used.push(idx);
-
-  const fb = bank[idx];
-  buildPuzzle(fb.q, fb.author);
-}
-
-/* ── BUILD PUZZLE ── */
-function buildPuzzle(plainText, author) {
-  S.plainText = plainText; S.author = author;
-  S.guesses = {}; S.solved = false; S.hintsUsed = 0;
-  S.selectedCipher = null; S.revealedLetters = new Set();
-  document.getElementById('statHints').textContent = '0';
-  document.getElementById('statPct').textContent = '0%';
-
-  const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  let shuffled;
-  do {
-    shuffled = [...alpha];
-    for (let i = shuffled.length-1; i>0; i--) {
-      const j = Math.floor(Math.random()*(i+1));
-      [shuffled[i],shuffled[j]] = [shuffled[j],shuffled[i]];
-    }
-  } while (alpha.some((l,i) => l===shuffled[i]));
-
-  S.cipher={}; S.decipher={};
-  alpha.forEach((l,i)=>{ S.cipher[l]=shuffled[i]; S.decipher[shuffled[i]]=l; });
-
-  S.tokens = [];
-  for (const ch of plainText) {
-    if (/[A-Z]/.test(ch)) S.tokens.push({type:'letter', plain:ch, cipher:S.cipher[ch]});
-    else if (ch===' ')    S.tokens.push({type:'space'});
-    else                  S.tokens.push({type:'punct', char:ch});
+  function toggleOutline(header) {
+    const content = header.nextElementSibling;
+    const toggle = header.querySelector('.outline-toggle');
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
   }
 
-  renderPuzzle(); renderKeyboard(); startTimer();
-  document.getElementById('btnHint').disabled = false;
-  document.getElementById('btnReveal').disabled = false;
-  document.getElementById('btnReset').disabled = false;
-  document.getElementById('keyboardSection').style.display = 'block';
-  document.getElementById('attribution').style.display = 'block';
-  document.getElementById('attribution').textContent = '— ' + author;
-  document.getElementById('statusLeft').textContent = 'Tap any red cipher letter to select it';
-  updateStatus();
-}
-
-/* ── RENDER PUZZLE ──
-   Tapping any instance of a cipher letter selects the whole group.
-   ALL boxes with that cipher letter highlight together.
-   One key press fills every box sharing that cipher letter at once. */
-function renderPuzzle() {
-  const area = document.getElementById('puzzleArea');
-  area.innerHTML = '';
-  const display = document.createElement('div');
-  display.className = 'cipher-display';
-  let wordGroup = document.createElement('div');
-  wordGroup.className = 'word-group';
-
-  S.tokens.forEach((tok) => {
-    if (tok.type==='space') {
-      display.appendChild(wordGroup);
-      const sp = document.createElement('div'); sp.className='space-char';
-      display.appendChild(sp);
-      wordGroup = document.createElement('div'); wordGroup.className='word-group';
-      return;
-    }
-    if (tok.type==='punct') {
-      const p = document.createElement('div'); p.className='punct-char'; p.textContent=tok.char;
-      wordGroup.appendChild(p); return;
-    }
-
-    const isSame = S.selectedCipher !== null && tok.cipher === S.selectedCipher;
-    const cell = document.createElement('div'); cell.className='letter-cell';
-
-    const cDiv = document.createElement('div');
-    cDiv.className = 'cipher-char' + (isSame ? ' same-selected' : '');
-    cDiv.textContent = tok.cipher;
-
-    const inp = document.createElement('input');
-    inp.className = 'letter-input';
-    inp.maxLength = 1; inp.readOnly = true;
-    inp.autocomplete='off'; inp.autocorrect='off'; inp.autocapitalize='off'; inp.spellcheck=false;
-
-    const guess = S.guesses[tok.cipher];
-    if (S.revealedLetters.has(tok.cipher)) {
-      inp.value = guess||''; inp.classList.add('revealed');
-    } else if (guess) {
-      inp.value = guess;
-      inp.classList.add(guess===tok.plain ? 'correct' : 'wrong');
-    }
-
-    if (isSame) inp.classList.add('same-cipher');   // highlight all matching
-    if (isSame) inp.classList.add('selected');       // (selected overrides in cascade — both applied for max visibility)
-
-    inp.addEventListener('click', ()=>selectCipher(tok.cipher));
-    inp.addEventListener('touchstart', e=>{ e.preventDefault(); selectCipher(tok.cipher); }, {passive:false});
-
-    cell.appendChild(cDiv); cell.appendChild(inp);
-    wordGroup.appendChild(cell);
-  });
-
-  display.appendChild(wordGroup);
-  area.appendChild(display);
-  updateTip();
-}
-
-function updateTip() {
-  const tip = document.getElementById('sameLetterTip');
-  if (!S.selectedCipher) { tip.textContent=''; return; }
-  const count = S.tokens.filter(t=>t.type==='letter'&&t.cipher===S.selectedCipher).length;
-  tip.textContent = count>1
-    ? `✦ "${S.selectedCipher}" appears ${count} times — your guess fills all ${count} boxes at once`
-    : `✦ "${S.selectedCipher}" appears once in this puzzle`;
-}
-
-/* ── SELECT + INPUT ── */
-function selectCipher(cipher) {
-  if (S.solved || S.revealedLetters.has(cipher)) return;
-  S.selectedCipher = cipher;
-  renderPuzzle(); renderKeyboard();
-  document.getElementById('statusRight').textContent = `Selected: ${cipher}`;
-  document.getElementById('keyLabel').textContent =
-    `Guessing for cipher "${cipher}" — fills every "${cipher}" instantly`;
-}
-
-function typeGuess(letter) {
-  if (!S.selectedCipher || S.solved || S.revealedLetters.has(S.selectedCipher)) return;
-  S.guesses[S.selectedCipher] = letter;
-  renderPuzzle(); renderKeyboard(); updateStatus(); checkWin();
-  if (!S.solved) advanceSelection();
-}
-
-function deleteLast() {
-  if (!S.selectedCipher || S.solved) return;
-  delete S.guesses[S.selectedCipher];
-  renderPuzzle(); renderKeyboard(); updateStatus();
-}
-
-function advanceSelection() {
-  const next = [...new Set(
-    S.tokens.filter(t=>t.type==='letter'&&!S.guesses[t.cipher]&&!S.revealedLetters.has(t.cipher)).map(t=>t.cipher)
-  )];
-  if (next.length>0) { S.selectedCipher=next[0]; renderPuzzle(); }
-}
-
-/* ── STATUS + WIN ── */
-function updateStatus() {
-  const ltoks = S.tokens.filter(t=>t.type==='letter');
-  const uniq = [...new Set(ltoks.map(t=>t.cipher))];
-  const filled = uniq.filter(c=>S.guesses[c]||S.revealedLetters.has(c)).length;
-  document.getElementById('statusLeft').textContent = `${filled} / ${uniq.length} cipher letters filled`;
-  document.getElementById('statPct').textContent = Math.round(filled/uniq.length*100)+'%';
-}
-
-function checkWin() {
-  const allOk = S.tokens.filter(t=>t.type==='letter').every(t=>{
-    return S.revealedLetters.has(t.cipher) || S.guesses[t.cipher]===t.plain;
-  });
-  if (allOk && !S.solved) {
-    S.solved=true; S.totalSolved++;
-    clearTimer();
-    document.getElementById('statSolved').textContent = S.totalSolved;
-    document.getElementById('statPct').textContent = '100%';
-    document.getElementById('winBanner').style.display = 'block';
-    document.getElementById('winMsg').textContent =
-      `Completed in ${document.getElementById('statTime').textContent} · ${S.hintsUsed} hint${S.hintsUsed!==1?'s':''} used`;
-    S.selectedCipher=null;
-    document.getElementById('sameLetterTip').textContent='';
-    renderPuzzle();
+  function toggleCheck(item) {
+    item.classList.toggle('checked');
   }
-}
 
-/* ── RESET PUZZLE ── */
-function resetPuzzle() {
-  if (!S.tokens.length) return;
-  S.guesses = {};
-  S.revealedLetters = new Set();
-  S.solved = false;
-  S.hintsUsed = 0;
-  S.selectedCipher = null;
-  document.getElementById('statHints').textContent = '0';
-  document.getElementById('statPct').textContent = '0%';
-  document.getElementById('winBanner').style.display = 'none';
-  document.getElementById('sameLetterTip').textContent = '';
-  document.getElementById('statusRight').textContent = '';
-  startTimer();
-  renderPuzzle();
-  renderKeyboard();
-  updateStatus();
-  document.getElementById('statusLeft').textContent = 'Tap any red cipher letter to select it';
-}
+  function copyNotes() {
+    const btn = document.getElementById('copyBtn');
 
-/* ── HINT + REVEAL ── */
-function giveHint() {
-  if (S.solved) return;
-  const cands = [...new Set(
-    S.tokens.filter(t=>t.type==='letter'&&!S.revealedLetters.has(t.cipher)&&S.guesses[t.cipher]!==t.plain).map(t=>t.cipher)
-  )];
-  if (!cands.length) return;
-  const pick = cands[Math.floor(Math.random()*cands.length)];
-  S.revealedLetters.add(pick); S.guesses[pick]=S.decipher[pick]; S.hintsUsed++;
-  document.getElementById('statHints').textContent = S.hintsUsed;
-  S.selectedCipher=null;
-  renderPuzzle(); renderKeyboard(); updateStatus(); checkWin();
-}
-
-function revealAll() {
-  if (S.solved) return;
-  [...new Set(S.tokens.filter(t=>t.type==='letter').map(t=>t.cipher))].forEach(c=>{
-    S.revealedLetters.add(c); S.guesses[c]=S.decipher[c];
-  });
-  S.solved=true; clearTimer(); S.selectedCipher=null;
-  document.getElementById('sameLetterTip').textContent='';
-  renderPuzzle(); updateStatus();
-}
-
-/* ── KEYBOARD ── */
-function renderKeyboard() {
-  const kb = document.getElementById('keyboard');
-  kb.innerHTML = '';
-  const used = new Set(Object.values(S.guesses));
-  KB_ROWS.forEach(row=>{
-    const rowDiv = document.createElement('div'); rowDiv.className='keyboard-row';
-    row.forEach(k=>{
-      const btn = document.createElement('button');
-      const isBack = k==='⌫';
-      btn.className='key'+(isBack?' backspace':used.has(k)?' used':'');
-      btn.textContent=k;
-      const h=()=>isBack?deleteLast():typeGuess(k);
-      btn.addEventListener('click',h);
-      btn.addEventListener('touchstart',e=>{e.preventDefault();h();},{passive:false});
-      rowDiv.appendChild(btn);
+    // Gather checklist state
+    const checks = document.querySelectorAll('.checklist-item');
+    const checkLines = Array.from(checks).map(item => {
+      const done = item.classList.contains('checked') ? '☑' : '☐';
+      const label = item.querySelector('.check-label').childNodes[0].textContent.trim();
+      return `  ${done} ${label}`;
     });
-    kb.appendChild(rowDiv);
-  });
 
-  // Frequency analysis
-  const cf={};
-  S.tokens.filter(t=>t.type==='letter').forEach(t=>cf[t.cipher]=(cf[t.cipher]||0)+1);
-  const sorted=Object.entries(cf).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const fg=document.getElementById('freqGrid');
-  fg.innerHTML='<span style="font-size:9px;color:var(--sepia);letter-spacing:0.12em;text-transform:uppercase;width:100%;display:block;margin-bottom:3px">Cipher frequency:</span>';
-  sorted.forEach(([c,n])=>{
-    const d=document.createElement('span');
-    d.className='freq-item'+(c===S.selectedCipher?' sel':'');
-    d.textContent=`${c}:${n}`;
-    fg.appendChild(d);
-  });
-}
+    // Gather textarea content
+    const textareas = document.querySelectorAll('.journal-textarea');
+    const labels = [
+      'OBSERVATIONS — WHAT I\'M NOTICING',
+      'PERSONAL STORY TO USE IN TALK',
+      'INVITATION TO CONGREGATION'
+    ];
 
-/* ── TIMER ── */
-function startTimer() {
-  S.startTime=Date.now(); clearTimer();
-  S.timerInterval=setInterval(()=>{
-    const s=Math.floor((Date.now()-S.startTime)/1000);
-    document.getElementById('statTime').textContent=`${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-  },1000);
-}
-function clearTimer(){ if(S.timerInterval) clearInterval(S.timerInterval); }
+    const textBlocks = Array.from(textareas).map((ta, i) => {
+      const content = ta.value.trim();
+      return `${labels[i] || 'NOTES'}:\n${content || '(nothing written yet)'}`;
+    });
 
-/* ── PHYSICAL KEYBOARD ── */
-document.addEventListener('keydown',e=>{
-  if (!S.selectedCipher||S.solved) return;
-  const k=e.key.toUpperCase();
-  if (/^[A-Z]$/.test(k)) { e.preventDefault(); typeGuess(k); }
-  else if (e.key==='Backspace') { e.preventDefault(); deleteLast(); }
-  else if (e.key==='Tab') { e.preventDefault(); advanceSelection(); }
-});
+    const date = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    const output = [
+      '✦ DRAWING CLOSER TO GOD — TALK JOURNAL',
+      `  Copied on ${date}`,
+      '',
+      '──────────────────────────────────',
+      'DAILY PRACTICE CHECKLIST:',
+      ...checkLines,
+      '',
+      '──────────────────────────────────',
+      ...textBlocks.flatMap(b => [b, '', '──────────────────────────────────', ''])
+    ].join('\n');
+
+    // Copy to clipboard — with iOS fallback
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(output).then(() => showCopied(btn)).catch(() => fallbackCopy(output, btn));
+    } else {
+      fallbackCopy(output, btn);
+    }
+  }
+
+  function fallbackCopy(text, btn) {
+    // iOS Safari fallback — create a temporary textarea
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '50%';
+    ta.style.left = '50%';
+    ta.style.transform = 'translate(-50%,-50%)';
+    ta.style.opacity = '0.01';
+    ta.style.fontSize = '16px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    // iOS requires setSelectionRange
+    ta.setSelectionRange(0, 99999);
+    try {
+      document.execCommand('copy');
+      showCopied(btn);
+    } catch(e) {
+      btn.textContent = '⚠️ Copy failed — select & copy manually';
+      btn.style.background = '#c0392b';
+    }
+    document.body.removeChild(ta);
+  }
+
+  function showCopied(btn) {
+    const original = btn.textContent;
+    btn.textContent = '✅ Copied! Paste into Notes or Google Docs';
+    btn.style.background = '#2d6a2d';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+    }, 3500);
+  }
 </script>
 </body>
 </html>
